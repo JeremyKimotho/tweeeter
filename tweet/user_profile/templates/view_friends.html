@@ -1,0 +1,20 @@
+{% if latest_following_list %}
+    <ul>
+    {% for follower in latest_following_list %}
+        <h2>{{ follower.display_name }}</h2>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing here...</p>
+{% endif %}
+
+
+{% if latest_followers_list %}
+    <ul>
+    {% for follower in latest_followers_list %}
+        <h2>{{ follower.display_name }}</h2>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing here...</p>
+{% endif %}

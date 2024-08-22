@@ -1,0 +1,14 @@
+{% if latest_likes_list %}
+    <ul>
+    {% for like in latest_likes_list %}
+        <h2>{{ like.poster_id }}</h2>
+        <li>{{ like.body }}</li>
+        <li>{{ like.likes }}</li>
+        <li>{{ like.quotes }}</li>
+        <li>{{ like.comments }}</li>
+        <li>{{ like.reposts }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing here...</p>
+{% endif %}

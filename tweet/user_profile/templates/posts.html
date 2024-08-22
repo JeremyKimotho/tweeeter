@@ -1,0 +1,89 @@
+{% if latest_posts_list %}
+    <ul>
+    {% for post in latest_posts_list %}
+        <h2>{{ post.poster_id }}</h2>
+        <li>{{ post.body }}</li>
+        <li>{{ post.likes }}</li>
+        <li>{{ post.quotes }}</li>
+        <li>{{ post.comments }}</li>
+        <li>{{ post.reposts }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing here...</p>
+{% endif %}
+
+{% if latest_quotes_list %}
+    <ul>
+    {% for post in latest_quotes_list %}
+        <h2>{{ post.poster_id }}</h2>
+        <li>{{ post.body }}</li>
+        <li>{{ post.likes }}</li>
+        <li>{{ post.quotes }}</li>
+        <li>{{ post.comments }}</li>
+        <li>{{ post.reposts }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing here...</p>
+{% endif %}
+
+{% if latest_comments_list %}
+    <ul>
+    {% for post in latest_comments_list %}
+        <h2>{{ post.poster_id }}</h2>
+        <li>{{ post.body }}</li>
+        <li>{{ post.likes }}</li>
+        <li>{{ post.quotes }}</li>
+        <li>{{ post.comments }}</li>
+        <li>{{ post.reposts }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing here...</p>
+{% endif %}
+
+{% if latest_reposts_list %}
+    <ul>
+    {% for post in latest_reposts_list %}
+        <h2>{{ post.poster_id }}</h2>
+        <li>{{ post.body }}</li>
+        <li>{{ post.likes }}</li>
+        <li>{{ post.quotes }}</li>
+        <li>{{ post.comments }}</li>
+        <li>{{ post.reposts }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing here...</p>
+{% endif %}
+
+{% if latest_likes_list %}
+    <ul>
+    {% for post in latest_likes_list %}
+        <h2>{{ post.poster_id }}</h2>
+        <li>{{ post.body }}</li>
+        <li>{{ post.likes }}</li>
+        <li>{{ post.quotes }}</li>
+        <li>{{ post.comments }}</li>
+        <li>{{ post.reposts }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing here...</p>
+{% endif %}
+
+{% if latest_bookmarks_list %}
+    <ul>
+    {% for post in latest_bookmarks_list %}
+        <h2>{{ post.poster_id }}</h2>
+        <li>{{ post.body }}</li>
+        <li>{{ post.likes }}</li>
+        <li>{{ post.quotes }}</li>
+        <li>{{ post.comments }}</li>
+        <li>{{ post.reposts }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nothing here...</p>
+{% endif %}
