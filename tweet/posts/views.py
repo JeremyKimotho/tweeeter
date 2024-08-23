@@ -3,9 +3,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse 
 
-from interactions.models import Like
-from interactions.models import Repost
-from interactions.models import Bookmark
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
@@ -21,97 +18,49 @@ def display_post(request, post_id):
 @login_required
 def create_like(request, post_id):
     og_post = get_object_or_404(Post, id=post_id)
-    og_poster = get_object_or_404(UserProfile, user_id=og_post.poster_id)
     post_liker_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     post_liker = get_object_or_404(UserProfile, user_id=post_liker_cu.id)
-
-    new_like = Like(
-        post = og_post,
-        liker = post_liker,
-        poster = og_poster,  
-    )
-
-    new_like.save()
+    og_post.likes.add(post_liker)   
     return HttpResponse()
 
 @login_required
 def delete_like(request, post_id):
     og_post = get_object_or_404(Post, id=post_id)
-    og_poster = get_object_or_404(UserProfile, user_id=og_post.poster_id)
     post_liker_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     post_liker = get_object_or_404(UserProfile, user_id=post_liker_cu.id)
-
-    new_like = get_object_or_404(Like,
-        post = og_post,
-        liker = post_liker,
-        poster = og_poster,  
-    )
-
-    new_like.delete()
+    og_post.likes.remove(post_liker)
     return HttpResponse()
 
 @login_required
 def create_repost(request, post_id):
     og_post = get_object_or_404(Post, id=post_id)
-    og_poster = get_object_or_404(UserProfile, user_id=og_post.poster_id)
     post_reposter_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     post_reposter = get_object_or_404(UserProfile, user_id=post_reposter_cu.id)
-
-    new_repost = Repost(
-        post = og_post,
-        reposter = post_reposter,
-        poster = og_poster, 
-    )
-
-    new_repost.save() 
+    og_post.reposts.add(post_reposter)
     return HttpResponse()
 
 @login_required
 def delete_repost(request, post_id):
     og_post = get_object_or_404(Post, id=post_id)
-    og_poster = get_object_or_404(UserProfile, user_id=og_post.poster_id)
     post_reposter_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     post_reposter = get_object_or_404(UserProfile, user_id=post_reposter_cu.id)
-
-    new_repost = get_object_or_404(Repost,
-        post = og_post,
-        reposter = post_reposter,
-        poster = og_poster,  
-    )
-
-    new_repost.delete()
+    og_post.reposts.remove(post_reposter)
     return HttpResponse()
 
 @login_required
 def create_bookmark(request, post_id):
     og_post = get_object_or_404(Post, id=post_id)
-    og_poster = get_object_or_404(UserProfile, user_id=og_post.poster_id)
     post_bookmarker_cu = get_object_or_404(CustomUser, email=request.user.get_username())
-    post_reposter = get_object_or_404(UserProfile, user_id=post_bookmarker_cu.id)
-
-    new_bookmark = Bookmark(
-        post = og_post,
-        bookmarker = post_reposter,
-        poster = og_poster, 
-    )
-
-    new_bookmark.save() 
+    post_bookmarker = get_object_or_404(UserProfile, user_id=post_bookmarker_cu.id)
+    og_post.bookmarks.add(post_bookmarker) 
     return HttpResponse()
 
 @login_required
 def delete_bookmark(request, post_id):
     og_post = get_object_or_404(Post, id=post_id)
-    og_poster = get_object_or_404(UserProfile, user_id=og_post.poster_id)
     post_bookmarker_cu = get_object_or_404(CustomUser, email=request.user.get_username())
-    post_reposter = get_object_or_404(UserProfile, user_id=post_bookmarker_cu.id)
-
-    new_bookmark = get_object_or_404(Bookmark,
-        post = og_post,
-        bookmarker = post_reposter,
-        poster = og_poster, 
-    )
-
-    new_bookmark.delete() 
+    post_bookmarker = get_object_or_404(UserProfile, user_id=post_bookmarker_cu.id)
+    og_post.bookmarks.remove(post_bookmarker) 
     return HttpResponse()
 
 @login_required
@@ -190,7 +139,7 @@ def delete_comment(request, post_id):
         comment.delete()
         return HttpResponse()
     else:
-        return HttpResponseRedirect(reverse('posts:create_post')) # change this to homepage once you have a homepage
+        return HttpResponseRedirect(reverse('homepage:home')) # homepage
 
 
 @login_required
@@ -227,5 +176,5 @@ def delete_post(request, post_id):
         post.delete()
         return HttpResponse()
     else:
-        return HttpResponseRedirect(reverse('posts:create_post')) # change this to homepage once you have a homepage
+        return HttpResponseRedirect(reverse('homepage:home')) # homepage
 

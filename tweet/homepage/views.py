@@ -6,13 +6,9 @@ from django.urls import reverse
 from django.utils import timezone
 
 from homepage.models import PostTraction
-from interactions.models import Like
-from interactions.models import Repost
-from interactions.models import Bookmark
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
-from relations.models import Follow
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
