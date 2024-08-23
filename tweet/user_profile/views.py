@@ -3,13 +3,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse 
 
-from interactions.models import Like
-from interactions.models import Repost
-from interactions.models import Bookmark
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
-from relations.models import Follow
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
@@ -30,16 +26,16 @@ def view_profile(request, profile_id):
 
 @login_required
 def view_user_following(request, profile_id):
-    following_fo = Follow.objects.filter(follower_id=profile_id)
-    following = [get_object_or_404(UserProfile, id=follow.following_id) for follow in following_fo]
+    user_profile = get_object_or_404(UserProfile, id=profile_id)
+    following = user_profile.following.all()
     context = {"latest_following_list": following}
     return render(request, "view_friends.html", context)
 
 
 @login_required
 def view_user_followers(request, profile_id):
-    followers_fo = Follow.objects.filter(following_id=profile_id)
-    followers = [get_object_or_404(UserProfile, id=follower.follower_id) for follower in followers_fo]
+    user_profile = get_object_or_404(UserProfile, id=profile_id)
+    followers = user_profile.followers.all()
     context = {"latest_followers_list": followers}
     return render(request, "view_friends.html", context)
 
@@ -67,16 +63,14 @@ def view_user_comments(request, profile_id):
 
 @login_required
 def view_user_reposts(request, profile_id):
-    latest_reposts_list_ro = Repost.objects.filter(reposter_id=profile_id)
-    latest_reposts_list = [get_object_or_404(Post, id=repost.post_id) for repost in latest_reposts_list_ro]
+    latest_reposts_list = Post.objects.filter(reposts__id=profile_id)
     context = {"latest_reposts_list": latest_reposts_list}
     return render(request, "posts.html", context)
 
 
 @login_required
 def view_user_likes(request, profile_id):
-    latest_likes_list_lo = Like.objects.filter(liker_id=profile_id)
-    latest_likes_list = [get_object_or_404(Post, id=like.post_id) for like in latest_likes_list_lo]
+    latest_likes_list = Post.objects.filter(likes__id=profile_id)
     context = {"latest_likes_list": latest_likes_list}
     return render(request, "posts.html", context)
 
@@ -85,8 +79,8 @@ def view_user_likes(request, profile_id):
 def view_user_bookmarks(request):
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
-    latest_bookmarks_list_bo = Bookmark.objects.filter(bookmarker_id=requester.id)
-    latest_bookmarks_list = [get_object_or_404(Post, id=bookmark.post_id) for bookmark in latest_bookmarks_list_bo]
+
+    latest_bookmarks_list = Post.objects.filter(bookmarks__id=requester.id)
     context = {"latest_bookmarks_list": latest_bookmarks_list}
     return render(request, "posts.html", context)
 
@@ -95,25 +89,14 @@ def view_user_bookmarks(request):
 def create_follow(request, profile_id):
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+    profile_to_follow = get_object_or_404(UserProfile, user_id=profile_id)
 
+    # make sure not trying to follow self
     if requester.id == profile_id:
         return HttpResponseRedirect(reverse("profile:home", args=(profile_id,)))
     else:
-        # check if they're already being followed 
-        status = Follow.objects.filter(follower_id=profile_id, following_id=requester.id)
-
-        # if they are make it mutual
-        if status.exists():
-            status[0].mutual=True
-            status.save()
-        # else create new follow record
-        else:
-            status = Follow(
-                follower=requester,
-                following_id=profile_id,
-            )
-            status.save()
-        
+        requester.following.add(profile_to_follow)
+        profile_to_follow.followers.add(requester)
         return HttpResponse()
 
 
@@ -121,36 +104,14 @@ def create_follow(request, profile_id):
 def delete_follow(request, profile_id):
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+    profile_to_follow = get_object_or_404(UserProfile, user_id=profile_id)
 
+    # make sure not trying to unfollow self
     if requester.id == profile_id:
         return HttpResponseRedirect(reverse('profile:home'), args=(profile_id,))
     else:
-        # check if requester was followed first
-        status = Follow.objects.filter(follower_id=profile_id, following_id=requester.id)
-
-        # if they were, unmutual the follow
-        if status.exists():
-            status[0].mutual=False
-            status.save()
-        else:
-            # check if requester followed first
-            status = Follow.objects.filter(follower_id=requester.id, following_id=profile_id)
-            if status.exists():
-                # if they were followed back, delete old record, create new Follow record with reversed roles
-                if status[0].mutual:
-                    status[0].delete()
-                    status = Follow(
-                        follower_id=profile_id,
-                        following=requester,
-                    )
-                    status.save()
-                # if they were never followed back just delete the record
-                else:
-                    status[0].delete()
-            else:
-                # Error if we get here, redirect to profile
-                return HttpResponseRedirect(reverse("profile:home", args=(profile_id,)))
-    
+        requester.following.remove(profile_to_follow)
+        profile_to_follow.followers.remove(requester)
         return HttpResponse()
 
 
@@ -158,24 +119,17 @@ def delete_follow(request, profile_id):
 def remove_follow(request, profile_id):
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+    profile_to_follow = get_object_or_404(UserProfile, user_id=profile_id)
 
+    # make sure not trying to remove self as follower
     if requester.id == profile_id:
         return HttpResponseRedirect(reverse('profile:home'), args=(profile_id,))
     else:
-        # check if requester was followed first
-        status = Follow.objects.filter(follower_id=profile_id, following_id=requester.id)
+        requester.following.remove(profile_to_follow)
+        requester.followers.remove(profile_to_follow)
+        profile_to_follow.following.remove(requester)
+        profile_to_follow.followers.remove(requester)
 
-        if status.exists():
-            status[0].delete()
-        else:
-            # check if requester followed first
-            status = Follow.objects.filter(follower_id=requester.id, following_id=profile_id)
-            if status.exists():
-                status[0].delete()
-            else:
-                # Error if we get here, redirect to profile
-                return HttpResponseRedirect(reverse("profile:home", args=(profile_id,)))
-        
         return HttpResponse()
 
 

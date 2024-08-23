@@ -4,13 +4,9 @@ from django.test import TestCase
 from django.test.client import Client
 from django.urls import reverse 
 
-from interactions.models import Like
-from interactions.models import Repost
-from interactions.models import Bookmark
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
-from relations.models import Follow
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
@@ -63,12 +59,7 @@ class ProfileViewTests(TestCase):
 
         test_user2 = UserProfile.objects.get(user=test_user2_cu)
 
-        # follow second test user with authenticated user
-        new_follow = Follow(
-            follower = test_user,
-            following = test_user2
-        )
-        new_follow.save()
+        test_user.following.add(test_user2)
 
         # check following again to see test_user2 is being followed
         url = reverse('profile:following', args=(test_user.id,))
@@ -97,11 +88,7 @@ class ProfileViewTests(TestCase):
         test_user2 = UserProfile.objects.get(user=test_user2_cu)
 
         # follow authenticated user with second test user
-        new_follow = Follow(
-            follower = test_user2,
-            following = test_user
-        )
-        new_follow.save()
+        test_user.followers.add(test_user2)
 
         # check followers again to see test_user is being followed by test_user2
         url = reverse('profile:followers', args=(test_user.id,))
@@ -213,8 +200,7 @@ class ProfileViewTests(TestCase):
         new_post.save()
 
         # create repost
-        new_repost = Repost.objects.create(poster=test_user, reposter=test_user, post=new_post)
-        new_repost.save()
+        new_post.reposts.add(test_user)
 
         # check the user reposts again and we should see the repost we just created above
         url = reverse('profile:reposts', args=(test_user.id,))
@@ -242,8 +228,7 @@ class ProfileViewTests(TestCase):
         new_post.save()
 
         # create likes
-        new_like = Like.objects.create(poster=test_user, liker=test_user, post=new_post)
-        new_like.save()
+        new_post.likes.add(test_user)
 
         # check the user likes again and we should see the like we just created above
         url = reverse('profile:likes', args=(test_user.id,))
@@ -271,10 +256,9 @@ class ProfileViewTests(TestCase):
         new_post.save()
 
         # create bookmark
-        new_bookmark = Bookmark.objects.create(poster=test_user, bookmarker=test_user, post=new_post)
-        new_bookmark.save()
+        new_post.bookmarks.add(test_user)
 
-        # check the user likes again and we should see the like we just created above
+        # check the user bookmarks again and we should see the bookmark we just created above
         url = reverse('profile:bookmarks')
         response = client.get(url)
 
@@ -322,12 +306,8 @@ class ProfileEditTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # check the 'follow' exists
-        try:
-            Follow.objects.get(follower=test_user, following=test_user2)
-        # catch the exception and fail test if follow does not exist
-        except Follow.DoesNotExist:
-            print("Follow record does not exist")
-            self.assertTrue(False)
+        self.assertTrue(test_user.following.contains(test_user2))
+        self.assertTrue(test_user2.followers.contains(test_user))
 
         client.logout()
 
@@ -342,13 +322,8 @@ class ProfileEditTests(TestCase):
         # response should be not be 200 and db should not reflect new follow
         self.assertNotEqual(response.status_code, 200)
 
-        # check the 'follow' does not exist
-        try:
-            Follow.objects.get(follower=test_user, following=test_user)
-            self.assertTrue(False)
-        # catch the exception and fail test if follow does exist
-        except Follow.DoesNotExist:
-            self.assertTrue(True)
+       # check the 'follow' does not exist
+        self.assertFalse(test_user.followers.contains(test_user))
 
         client.logout()
 
@@ -369,12 +344,8 @@ class ProfileEditTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # check the 'follow' exists
-        try:
-            Follow.objects.get(follower=test_user, following=test_user2)
-        # catch the exception and fail test if follow does not exist
-        except Follow.DoesNotExist:
-            print("Follow record does not exist")
-            self.assertTrue(False)
+        self.assertTrue(test_user.following.contains(test_user2))
+        self.assertTrue(test_user2.followers.contains(test_user))
 
         # attempt to unfollow second test user
         url= reverse('profile:delete_follow', args=(test_user2.id,))
@@ -383,13 +354,9 @@ class ProfileEditTests(TestCase):
         # response should be 200 and db should reflect change
         self.assertEqual(response.status_code, 200)
 
-        # check the 'follow' does not  exist
-        try:
-            Follow.objects.get(follower=test_user, following=test_user2)
-            self.assertTrue(False)
-        # catch the exception and fail test if follow does exist
-        except Follow.DoesNotExist:
-            self.assertTrue(True)
+        # check the 'follow' does not exist
+        self.assertFalse(test_user.following.contains(test_user2))
+        self.assertFalse(test_user2.followers.contains(test_user))
         
         client.logout()
 
@@ -406,16 +373,12 @@ class ProfileEditTests(TestCase):
         url= reverse('profile:delete_follow', args=(test_user2.id,))
         response = client.get(url)
 
-        # response should not be 200 and db should reflect no change
-        self.assertNotEqual(response.status_code, 200)
+        # response should be 200 and db should reflect no change
+        self.assertEqual(response.status_code, 200)
 
-        # check the 'follow' does not  exist
-        try:
-            Follow.objects.get(follower=test_user, following=test_user2)
-            self.assertTrue(False)
-        # catch the exception and fail test if follow does exist
-        except Follow.DoesNotExist:
-            self.assertTrue(True)
+        # check the 'follow' does not exist
+        self.assertFalse(test_user.following.contains(test_user2))
+        self.assertFalse(test_user2.followers.contains(test_user))
 
         client.logout()
 
@@ -436,12 +399,8 @@ class ProfileEditTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # check the 'follow' exists
-        try:
-            Follow.objects.get(follower=test_user, following=test_user2)
-        # catch the exception and fail test if follow does not exist
-        except Follow.DoesNotExist:
-            print("Follow record does not exist")
-            self.assertTrue(False)
+        self.assertTrue(test_user.following.contains(test_user2))
+        self.assertTrue(test_user2.followers.contains(test_user))
 
         # attempt to remove second test user as follower
         url= reverse('profile:remove_follow', args=(test_user2.id,))
@@ -450,13 +409,9 @@ class ProfileEditTests(TestCase):
         # response should be ok and db should reflect removal
         self.assertEqual(response.status_code, 200)
 
-        # check the 'follow' does not  exist
-        try:
-            Follow.objects.get(follower=test_user, following=test_user2)
-            self.assertTrue(False)
-        # catch the exception and fail test if follow does exist
-        except Follow.DoesNotExist:
-            self.assertTrue(True)
+        # check the 'follow' does not exist
+        self.assertFalse(test_user.following.contains(test_user2))
+        self.assertFalse(test_user2.followers.contains(test_user))
 
         client.logout()
 
@@ -473,16 +428,11 @@ class ProfileEditTests(TestCase):
         url= reverse('profile:remove_follow', args=(test_user2.id,))
         response = client.get(url)
 
-        # response should not be 200 and db should reflect no change
-        self.assertNotEqual(response.status_code, 200)
+        # response should be 200 and db should reflect no change
+        self.assertEqual(response.status_code, 200)
 
-        # check the 'follow' does not  exist
-        try:
-            Follow.objects.get(follower=test_user, following=test_user2)
-            self.assertTrue(False)
-        # catch the exception and fail test if follow does exist
-        except Follow.DoesNotExist:
-            self.assertTrue(True)
+       # check the 'follow' does not exist
+        self.assertFalse(test_user.following.contains(test_user2))
 
         client.logout()
 

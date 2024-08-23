@@ -5,9 +5,6 @@ from django.test.client import Client
 from django.utils import timezone
 from django.urls import reverse 
 
-from interactions.models import Like
-from interactions.models import Repost
-from interactions.models import Bookmark
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
@@ -486,26 +483,14 @@ class PostInteractionTests(TestCase):
         return post, profile
     
 
-    def clean_up(self):
-        test_user1 = CustomUser.objects.get(email='test@test.com')
-        test_user2 = CustomUser.objects.get(email='test1@test.com')
-        test_profile_1 = UserProfile.objects.get(user=test_user1)
-        test_profile_2 = UserProfile.objects.get(user=test_user2)
-        test_post = Post.objects.get(poster=test_profile_2)
-
-        test_user1.delete()
-        test_user2.delete()
-        test_profile_1.delete()
-        test_profile_2.delete()
-        test_post.delete()
-        return
-    
-
     def test_create_like_as_normal(self):
         # Create test logins and test post
         test_user, client = self.login()
         test_profile_1 = UserProfile.objects.get(user=test_user)
         test_post, test_profile_2 = self.create_test_post()
+
+        # Check post is not already liked
+        self.assertFalse(test_post.likes.contains(test_profile_1))
 
         # Make request to 'like' post
         url = reverse('posts:like', args=(test_post.id,))
@@ -515,11 +500,7 @@ class PostInteractionTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check the 'like' exists
-        try:
-            Like.objects.get(post=test_post, liker=test_profile_1, poster=test_profile_2)
-        except Like.DoesNotExist:
-            print("Like record does not exist")
-            self.assertTrue(False)
+        self.assertTrue(test_post.likes.contains(test_profile_1))
 
         client.logout()
     
@@ -544,31 +525,26 @@ class PostInteractionTests(TestCase):
         test_profile_1 = UserProfile.objects.get(user=test_user)
         test_post, test_profile_2 = self.create_test_post()
 
+        # Check post is not already liked
+        self.assertFalse(test_post.likes.contains(test_profile_1))
+
         # Make request to 'like' post
         url = reverse('posts:like', args=(test_post.id,))
         response = client.get(url)
 
         # Check the response is ok and db reflects change caused by 'like'
         self.assertEqual(response.status_code, 200)
-        
+
         # Check the 'like' exists
-        try:
-            Like.objects.get(post=test_post, liker=test_profile_1, poster=test_profile_2)
-        except Like.DoesNotExist:
-            print("Like record does not exist")
-            self.assertTrue(False)
+        self.assertTrue(test_post.likes.contains(test_profile_1))
 
         # Make request to 'unlike' post
         url = reverse('posts:unlike', args=(test_post.id,))
         response = client.get(url)
 
-        # Check the 'like' does not exist
-        try:
-            Like.objects.get(post=test_post, liker=test_profile_1, poster=test_profile_2)
-            self.assertTrue(False)
-        except Like.DoesNotExist:
-            self.assertTrue(True)
-
+        # Check the 'like' does not exist anymore
+        self.assertFalse(test_post.likes.contains(test_profile_1))
+        
         client.logout()
 
 
@@ -578,6 +554,9 @@ class PostInteractionTests(TestCase):
         test_profile_1 = UserProfile.objects.get(user=test_user)
         test_post, test_profile_2 = self.create_test_post()
 
+        # Check post is not already reposted
+        self.assertFalse(test_post.reposts.contains(test_profile_1))
+
         # Make request to 'repost' post
         url = reverse('posts:repost', args=(test_post.id,))
         response = client.get(url)
@@ -586,11 +565,7 @@ class PostInteractionTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check the 'repost' exists
-        try:
-            Repost.objects.get(post=test_post, reposter=test_profile_1, poster=test_profile_2)
-        except Repost.DoesNotExist:
-            print("Repost record does not exist")
-            self.assertTrue(False)
+        self.assertTrue(test_post.reposts.contains(test_profile_1))
 
         client.logout()
 
@@ -615,6 +590,9 @@ class PostInteractionTests(TestCase):
         test_profile_1 = UserProfile.objects.get(user=test_user)
         test_post, test_profile_2 = self.create_test_post()
 
+        # Check post is not already reposted
+        self.assertFalse(test_post.reposts.contains(test_profile_1))
+
         # Make request to 'repost' post
         url = reverse('posts:repost', args=(test_post.id,))
         response = client.get(url)
@@ -623,22 +601,16 @@ class PostInteractionTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check the 'repost' exists
-        try:
-            Repost.objects.get(post=test_post, reposter=test_profile_1, poster=test_profile_2)
-        except Repost.DoesNotExist:
-            print("Repost record does not exist")
-            self.assertTrue(False)
+        self.assertTrue(test_post.reposts.contains(test_profile_1))
 
         # Make request to 'unrepost' post
         url = reverse('posts:unrepost', args=(test_post.id,))
         response = client.get(url)
 
-        # Check the 'repost' does not exist
-        try:
-            Repost.objects.get(post=test_post, reposter=test_profile_1, poster=test_profile_2)
-            self.assertTrue(False)
-        except Repost.DoesNotExist:
-            self.assertTrue(True)
+        # Check the 'repost' does not exist anymore
+        self.assertFalse(test_post.reposts.contains(test_profile_1))
+        
+        client.logout()
 
 
     def test_create_bookmark_as_normal(self):
@@ -646,6 +618,9 @@ class PostInteractionTests(TestCase):
         test_user, client = self.login()
         test_profile_1 = UserProfile.objects.get(user=test_user)
         test_post, test_profile_2 = self.create_test_post()
+
+        # Check post is not already bookmarked
+        self.assertFalse(test_post.bookmarks.contains(test_profile_1))
 
         # Make request to 'bookmark' post
         url = reverse('posts:bookmark', args=(test_post.id,))
@@ -655,11 +630,7 @@ class PostInteractionTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check the 'bookmark' exists
-        try:
-            Bookmark.objects.get(post=test_post, bookmarker=test_profile_1, poster=test_profile_2)
-        except Bookmark.DoesNotExist:
-            print("Bookmark record does not exist")
-            self.assertTrue(False)
+        self.assertTrue(test_post.bookmarks.contains(test_profile_1))
 
         client.logout()
 
@@ -684,6 +655,9 @@ class PostInteractionTests(TestCase):
         test_profile_1 = UserProfile.objects.get(user=test_user)
         test_post, test_profile_2 = self.create_test_post()
 
+        # Check post is not already bookmarked
+        self.assertFalse(test_post.bookmarks.contains(test_profile_1))
+
         # Make request to 'bookmark' post
         url = reverse('posts:bookmark', args=(test_post.id,))
         response = client.get(url)
@@ -692,21 +666,13 @@ class PostInteractionTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check the 'bookmark' exists
-        try:
-            Bookmark.objects.get(post=test_post, bookmarker=test_profile_1, poster=test_profile_2)
-        except Bookmark.DoesNotExist:
-            print("Bookmark record does not exist")
-            self.assertTrue(False)
+        self.assertTrue(test_post.bookmarks.contains(test_profile_1))
 
         # Make request to 'unbookmark' post
         url = reverse('posts:unbookmark', args=(test_post.id,))
         response = client.get(url)
 
-        # Check the 'bookmark' does not exist
-        try:
-            Bookmark.objects.get(post=test_post, bookmarker=test_profile_1, poster=test_profile_2)
-            self.assertTrue(False)
-        except Bookmark.DoesNotExist:
-            self.assertTrue(True)
-
+        # Check the 'bookmark' does not exist anymore
+        self.assertFalse(test_post.bookmarks.contains(test_profile_1))
+        
         client.logout()
