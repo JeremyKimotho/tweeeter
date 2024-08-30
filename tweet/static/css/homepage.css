@@ -1,0 +1,18 @@
+.card {
+    margin-top: 15%;
+    border: 2px solid grey;
+}
+
+.dropdown-menu {
+    margin-top: -50%;
+    padding-left: -10px;
+    padding-top: 0;
+    max-height: 100%;
+    height:auto;
+    overflow-y: hidden;
+}
+
+.dropdown-item {
+    width: 10px;
+    white-space: nowrap;
+}

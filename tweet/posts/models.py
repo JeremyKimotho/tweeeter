@@ -16,6 +16,21 @@ class Post(models.Model):
     comments = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='post_comments')
     date_posted = models.DateTimeField(default=timezone.now)
 
+    def getLikes(self):
+        return self.likes.count()
+    
+    def getReposts(self):
+        return self.reposts.count()
+    
+    def getBookmarks(self):
+        return self.bookmarks.count()
+    
+    def getComments(self):
+        return self.comments.count()
+    
+    def getQuotes(self):
+        return self.quotes.count()
+
 class Quote(Post):
     quote_post = models.ForeignKey(Post, related_name='post_og_quote', on_delete=models.CASCADE)
     

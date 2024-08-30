@@ -1,14 +1,105 @@
-{% if latest_posts %}
-    <ul>
-    {% for post in latest_posts %}
-        <h2>{{ post.poster_id }}</h2>
-        <li>{{ post.body }}</li>
-        <li>{{ post.likes }}</li>
-        <li>{{ post.quotes }}</li>
-        <li>{{ post.comments }}</li>
-        <li>{{ post.reposts }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Nothing here...</p>
-{% endif %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block content_wrapper %}
+    <div class="content-wrapper">
+        {% if latest_posts_list %}
+        {% for post in latest_posts_list %}
+            <div class="card">
+                <div class="card-header">
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="col-2">
+                                <!-- dp here -->
+                            </div>
+                            <div class="col-3">
+                                <h5 class="post-poster-dn">{{ post.poster_profile.display_name }}</h3>
+                            </div>
+                            <div class="col-3">
+                                <h5 class="post-poster-username">@{{ post.poster_account.username }}</h3>
+                            </div>
+                            <div class="col-2">
+                                <h5 class="post-pub-date">{{ post.post.pub_date }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="post-body-text">{{ post.post.body }}</p>
+                    <footer class="blockquote-footer">
+                        Will add a lil something in here too in a sec...
+                    </footer>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    <div class="container">
+                        <div class="row text-center">
+                            <!-- First Button + Counter -->
+                            <div class="col-3 d-flex justify-content-center align-items-center">
+                                <button id="comment_button" data-id="post.post.id" data-url="{% url 'posts:get_comments_count' post.post.id %}" hx-get="{% url 'posts:comment' post.post.id %}" hx-target="#comment">Comment</button>
+                                <span class="ms-2" id="post-comments-{{ post.post.id }}">{{ post.comments_count }}</span> <!-- Counter or any text -->
+                            </div>
+
+                            <!-- Second Button + Counter -->
+                            <div class="col-3 d-flex justify-content-center align-items-center">
+                                <!-- <div class="dropdown">
+                                    <button id="toggleButton" class="dropbtn">Repost</button>
+                                    <div id="dropdownContent" class="dropdown-content">
+                                        <button id="repost_button" data-t-url="{% url 'posts:repost' post.post.id %}" data-f-url="{% url 'posts:unrepost' post.post.id %}"><span class="ms-2" id="post-repost-dd">Repost</span></button>
+                                        <button id="quote_button" data-url="{% url 'posts:quote' post.post.id %}">Quote</button>
+                                    </div>
+                                    <span class="ms-2" id="post-reposts">{{ post.reposts_count }}</span> 
+                                </div> -->
+                                <!-- Split dropup button -->
+                                <div class="btn-group dropup">
+                                    <a class="btn btn-secondary dropdown" href="#" hx-get="{% url 'posts:repost' post.post.id %}" hx-target="#post-reposts-{{ post.post.id }}" role="button">Repost</a>
+                                    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <!-- Dropdown menu links -->
+                                        <li><a class="dropdown-item" hx-get="{% url 'posts:quote' post.post.id %}" hx-target="#quote" href="#">Quote</a></li>
+                                    </ul>
+                                </div>
+                                <span class="ms-2" id="post-reposts-{{ post.post.id }}">{{ post.reposts_count }}</span>
+                            </div>
+
+                            <!-- Third Button + Counter -->
+                            <div class="col-3 d-flex justify-content-center align-items-center">
+                                <button hx-get="{% url 'posts:like' post.post.id %}" hx-target="#post-likes-{{ post.post.id }}">Like</button>
+                                <span class="ms-2" id="post-likes-{{ post.post.id }}">{{ post.likes_count }}</span> <!-- Counter or any text -->
+                            </div>
+
+                            <!-- Fourth Button + Counter -->
+                            <div class="col-3 d-flex justify-content-center align-items-center">
+                            <button hx-get="{% url 'posts:bookmark' post.post.id %}" hx-target="#post-bookmarks-{{ post.post.id }}">Bookmark</button>
+                            <span class="ms-2" id="post-bookmarks-{{ post.post.id }}">{{ post.bookmarks_count }}</span> <!-- Counter or any text -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% else %}
+            <p class="homepage-no-posts-text">Nothing here...</p>
+        {% endif %}
+        <!-- Create Comment Modal -->
+        <div id="comment-modal" class="modal fade">
+            <div id="comment" class="modal-dialog" hx-target="this"></div>
+        </div>
+        
+        <!-- Create Quote Modal -->
+        <div id="quote-modal" class="modal fade">
+            <div id="quote" class="modal-dialog" hx-target="this"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/homepage.js' %}"></script>
+{% endblock %}
