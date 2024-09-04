@@ -1,7 +1,16 @@
-{{ bio }}
-{{ followers }}
-{{ following }}
-{{ location }}
-{{ display_name }}
-{{ background }}
-{{ display_picture }}
+{% load static %}
+
+<div class="container">
+    <div class="row">
+        <p>{{ profile.username }}</p>
+        <p>{{ profile.bio }}</p>
+        <p>Followers: {{ profile.followers }}</p>
+        <p>Following: {{ profile.following }}</p>
+        <p>Location: {{ profile.location }}</p>
+        <p>{{ profile.display_name }}</p>
+        <p>{{ profile.background }}</p>
+        <p>{{ profile.display_picture }}</p>
+    </div>
+</div>
+
+

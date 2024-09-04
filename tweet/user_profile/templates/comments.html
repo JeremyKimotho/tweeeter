@@ -10,9 +10,9 @@
 
         <nav class="nav nav-pills nav-justified">
             <a class="nav-link" href="{% url 'profile:posts' profile_data.id %}">Posts</a>
-            <a class="nav-link" href="{% url 'profile:comments' profile_data.id %}">Replies</a>
+            <a class="nav-link active" href="#">Replies</a>
             <a class="nav-link" href="{% url 'profile:media' profile_data.id %}">Media</a>
-            <a class="nav-link active" href="#">Likes</a>
+            <a class="nav-link" href="{% url 'profile:likes' profile_data.id %}">Likes</a>
         </nav>
     </div>
     <div class="content-wrapper">

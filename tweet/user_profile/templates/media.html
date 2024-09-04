@@ -11,8 +11,8 @@
         <nav class="nav nav-pills nav-justified">
             <a class="nav-link" href="{% url 'profile:posts' profile_data.id %}">Posts</a>
             <a class="nav-link" href="{% url 'profile:comments' profile_data.id %}">Replies</a>
-            <a class="nav-link" href="{% url 'profile:media' profile_data.id %}">Media</a>
-            <a class="nav-link active" href="#">Likes</a>
+            <a class="nav-link active" href="#">Media</a>
+            <a class="nav-link" href="{% url 'profile:likes' profile_data.id %}">Likes</a>
         </nav>
     </div>
     <div class="content-wrapper">
@@ -93,8 +93,17 @@
             </div>
         {% endfor %}
         {% else %}
-            <p class="homepage-no-posts-text">Nothing here...</p>
+            <!-- <p class="homepage-no-posts-text">Nothing here...</p> -->
+            <div style="text-align: center; margin-top: 100px;">
+                <h1 style="font-size: 3rem;">🚧 Under Construction 🚧</h1>
+                <p style="font-size: 1.5rem;">
+                    We're working hard to build something awesome! 🛠️ <br>
+                    Please check back soon for updates. 😊
+                </p>
+                <img src="{% static 'images/under_construction.gif' %}" alt="Under Construction" style="margin-top: 20px; max-width: 220px;">
+            </div>
         {% endif %}
+
         <!-- Create Comment Modal -->
         <div id="comment-modal" class="modal fade">
             <div id="comment" class="modal-dialog" hx-target="this"></div>
@@ -115,3 +124,5 @@
 {% block extra_js %}
     <script src="{% static 'js/list_posts.js' %}"></script>
 {% endblock %}
+
+

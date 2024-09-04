@@ -22,3 +22,9 @@ class UserProfile(models.Model):
     display_name = models.CharField(max_length=12, default='New User')
     bio = models.CharField(max_length=80, default='I\'m new here ! :)')
     background_picture = models.ImageField(upload_to='media/', blank=True, null=True, validators=[validate_file_type])
+
+    def getFollowers(self):
+        return self.followers.count()
+    
+    def getFollowing(self):
+        return self.following.count()

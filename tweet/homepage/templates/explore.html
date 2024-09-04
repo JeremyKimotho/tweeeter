@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ username }}'s Journey {% endblock %}
+
+{% block content_wrapper %}
+<div style="text-align: center; margin-top: 100px;">
+    <h1 style="font-size: 3rem;">🚧 Under Construction 🚧</h1>
+    <p style="font-size: 1.5rem;">
+        We're working hard to build something awesome! 🛠️ <br>
+        Please check back soon for updates. 😊
+    </p>
+    <img src="{% static 'images/under_construction.gif' %}" alt="Under Construction" style="margin-top: 20px; max-width: 220px;">
+</div>
+{% endblock %}

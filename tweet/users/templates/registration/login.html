@@ -8,7 +8,7 @@
     {% if user.is_authenticated %}
         <p>Your account doesn't have access to this page. To proceed,
         please login with an account that has access.</p>
-        {% else %}
+    {% else %}
         <p>Please login to see this page.</p>
     {% endif %}
 {% endif %}
@@ -30,7 +30,7 @@
 <input type="hidden" name="next" value="{{ next }}">
 </form>
 
-<p><a href="{% url 'users:password_reset' %}">Forgot your password?</a></p>
-<p><a href="{% url 'users:registration' %}">Create Account</a></p>
+<p><a href="{% url 'users:password_reset' %}">Forgot your password ?</a></p>
+<p><a href="{% url 'users:registration' %}">Don't have an account yet ? Create Account</a></p>
 
 {% endblock %}

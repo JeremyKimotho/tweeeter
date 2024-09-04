@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse 
 
+from homepage.views import create_combined_post
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
@@ -23,6 +24,23 @@ def view_profile(request, profile_id):
                "background": user_a.background_picture}
     return render(request, "view_profile.html", context)
 
+@login_required
+def view_own_profile(request):
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    user_profile = get_object_or_404(UserProfile, user_id=requester_cu.id)
+
+    user_profile_stripped = {
+        "id": user_profile.id,
+        "bio": user_profile.bio,
+        "followers": user_profile.getFollowers(),
+        "following:": user_profile.getFollowing(),
+        "location": user_profile.location,
+        "display_picture": user_profile.display_picture,
+        "display_name": user_profile.display_name,
+        "background": user_profile.background_picture
+    }
+
+    return render(request,  "posts.html", context={"profile_data":user_profile_stripped, "username": requester_cu.user_name})
 
 @login_required
 def view_user_following(request, profile_id):
@@ -42,8 +60,25 @@ def view_user_followers(request, profile_id):
 
 @login_required
 def view_user_posts(request, profile_id):
-    latest_posts_list = Post.objects.filter(poster_id=profile_id)
-    context = {"latest_posts_list": latest_posts_list}
+    user_profile  = get_object_or_404(UserProfile, id=profile_id)
+    user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
+
+    user_profile_stripped = {
+        "username": user_cu.user_name,
+        "id": user_profile.id,
+        "bio": user_profile.bio,
+        "followers": user_profile.getFollowers(),
+        "following:": user_profile.getFollowing(),
+        "location": user_profile.location,
+        "display_picture": user_profile.display_picture,
+        "display_name": user_profile.display_name,
+        "background": user_profile.background_picture
+    }
+
+    latest_posts_list_raw = Post.objects.filter(poster_id=profile_id)
+    latest_posts_list = create_combined_post(latest_posts_list_raw)
+
+    context = {"latest_posts_list": latest_posts_list, "profile_data": user_profile_stripped,}
     return render(request, "posts.html", context)
 
 
@@ -56,9 +91,26 @@ def view_user_quotes(request, profile_id):
 
 @login_required
 def view_user_comments(request, profile_id):
-    latest_comments_list = Comment.objects.filter(poster_id=profile_id)
-    context = {"latest_comments_list": latest_comments_list}
-    return render(request, "posts.html", context)
+    user_profile  = get_object_or_404(UserProfile, id=profile_id)
+    user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
+
+    user_profile_stripped = {
+        "username": user_cu.user_name,
+        "id": user_profile.id,
+        "bio": user_profile.bio,
+        "followers": user_profile.getFollowers(),
+        "following:": user_profile.getFollowing(),
+        "location": user_profile.location,
+        "display_picture": user_profile.display_picture,
+        "display_name": user_profile.display_name,
+        "background": user_profile.background_picture
+    }
+
+    latest_comments_list_raw = Comment.objects.filter(poster_id=profile_id)
+    latest_comments_list = create_combined_post(latest_comments_list_raw)
+
+    context = {"latest_posts_list": latest_comments_list, "profile_data": user_profile_stripped,}
+    return render(request, "comments.html", context)
 
 
 @login_required
@@ -70,9 +122,50 @@ def view_user_reposts(request, profile_id):
 
 @login_required
 def view_user_likes(request, profile_id):
-    latest_likes_list = Post.objects.filter(likes__id=profile_id)
-    context = {"latest_likes_list": latest_likes_list}
-    return render(request, "posts.html", context)
+    user_profile  = get_object_or_404(UserProfile, id=profile_id)
+    user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
+
+    user_profile_stripped = {
+        "username": user_cu.user_name,
+        "id": user_profile.id,
+        "bio": user_profile.bio,
+        "followers": user_profile.getFollowers(),
+        "following:": user_profile.getFollowing(),
+        "location": user_profile.location,
+        "display_picture": user_profile.display_picture,
+        "display_name": user_profile.display_name,
+        "background": user_profile.background_picture
+    }
+
+    latest_likes_list_raw_p = Post.objects.filter(likes__id=profile_id)
+    latest_likes_list_raw_q = Quote.objects.filter(likes__id=profile_id)
+    latest_likes_list_raw_c = Comment.objects.filter(likes__id=profile_id)
+    latest_likes_list = create_combined_post(latest_likes_list_raw_p) + create_combined_post(latest_likes_list_raw_q) + create_combined_post(latest_likes_list_raw_c)
+
+    context = {"latest_posts_list": latest_likes_list, "profile_data": user_profile_stripped,}
+    return render(request, "likes.html", context)
+
+@login_required
+def view_user_media(request, profile_id):
+    user_profile  = get_object_or_404(UserProfile, id=profile_id)
+    user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
+
+    user_profile_stripped = {
+        "username": user_cu.user_name,
+        "id": user_profile.id,
+        "bio": user_profile.bio,
+        "followers": user_profile.getFollowers(),
+        "following:": user_profile.getFollowing(),
+        "location": user_profile.location,
+        "display_picture": user_profile.display_picture,
+        "display_name": user_profile.display_name,
+        "background": user_profile.background_picture
+    }
+
+    latest_media_list=[]
+
+    context = {"latest_posts_list": latest_media_list, "profile_data": user_profile_stripped,}
+    return render(request, "media.html", context)
 
 
 @login_required
@@ -80,9 +173,11 @@ def view_user_bookmarks(request):
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
 
-    latest_bookmarks_list = Post.objects.filter(bookmarks__id=requester.id)
-    context = {"latest_bookmarks_list": latest_bookmarks_list}
-    return render(request, "posts.html", context)
+    latest_posts_raw = Post.objects.filter(bookmarks__id=requester.id)
+    latest_posts = create_combined_post(latest_posts_raw)
+
+    context = {"latest_posts_list": latest_posts, "username": requester_cu.user_name}
+    return render(request, "bookmarks.html", context)
 
 
 @login_required
@@ -132,6 +227,17 @@ def remove_follow(request, profile_id):
 
         return HttpResponse()
 
+@login_required
+def view_messages(request):
+    pass
+
+@login_required
+def view_notifications(request):
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+
+    context = {"username": requester_cu.user_name}
+    return render(request, "notifications.html", context)
 
 # def view_user_dp(request, profile_id):
 #     user = get_object_or_404(UserProfile, id=user_id)

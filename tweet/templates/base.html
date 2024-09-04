@@ -21,15 +21,14 @@
             <div class="col-3 d-flex flex-column justify-content-center align-items-left">
                 <!-- Navigation Bar -->
                 <ul>
-                    <li><a href="default.asp">Home</a></li>
-                    <li><a href="news.asp">Explore</a></li>
-                    <li><a href="contact.asp">Notifications</a></li>
-                    <li><a href="about.asp">Messages</a></li>
-                    <li><a href="about.asp">Bookmarks</a></li>
-                    <li><a href="about.asp">Profile</a></li>
+                    <li><a href="{% url 'homepage:home' %}">Home</a></li>
+                    <li><a href="{% url 'homepage:explore' %}">Explore</a></li>
+                    <li><a href="{% url 'profile:notifications' %}">Notifications</a></li>
+                    <li><a href="{% url 'profile:bookmarks' %}">Bookmarks</a></li>
+                    <li><a href="{% url 'profile:my_profile' %}">Profile</a></li>
                     <li><a href="about.asp">More</a></li>
                     <li><button hx-get="{% url 'posts:create_post' %}" hx-target="#dialog">Post</button></li>
-                    <li><a href="about.asp">Logout</a></li>
+                    <li><a href="{% url 'users:logout' %}">Logout</a></li>
                 </ul>
             </div>
             <div class="col-6 d-flex flex-column justify-content-center align-items-center">
@@ -40,15 +39,16 @@
                     {% endblock %}
                 </div>
             </div>
-            <div class="col-3 d-flex flex-column justify-content-center align-items-center">
-                <!-- Footer -->
-                <footer>
-                    <form class="d-flex" role="search" action="{% url 'homepage:search' %}" method="post">
-                        {% csrf_token %}
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search_form">
-                    </form>
-                    <p> 2024 Tweetclone. All rights reserved.</p>
-                </footer>
+            <div class="col-3 d-flex flex-column align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <form class="d-flex" role="search" action="{% url 'homepage:search' %}" method="post">
+                            {% csrf_token %}
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search_form">
+                        </form>
+                        <p> 2024 Tweetclone. All rights reserved.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

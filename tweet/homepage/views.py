@@ -12,7 +12,14 @@ from posts.models import Quote
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
-def create_combined_post(posts, users, cusers, comments, reposts, likes, bookmarks):
+def create_combined_post(posts):
+    users = [get_object_or_404(UserProfile, id=p.poster_id) for p in posts]
+    cusers = [get_object_or_404(CustomUser, id=u.user_id) for u in users]
+    comments = [(p.getComments()) for p in posts] 
+    reposts = [(p.getReposts() + p.getQuotes()) for p in posts] 
+    likes = [(p.getLikes()) for p in posts]
+    bookmarks = [(p.getBookmarks()) for p in posts]
+
     combined_posts = []
     
     for post, profile, account, comments_count, reposts_count, likes_count, bookmarks_count in zip(posts, users, cusers,comments, reposts, likes, bookmarks):
@@ -64,20 +71,20 @@ def view_posts(request):
     # latest_posts = [get_object_or_404(Post, id=pt_post.post_id) for pt_post in latest_posts_pt]
 
     latest_posts = Post.objects.all()
-    latest_posts_users = [get_object_or_404(UserProfile, id=p.poster_id) for p in latest_posts]
-    latest_posts_cu = [get_object_or_404(CustomUser, id=u.user_id) for u in latest_posts_users]
-    latest_posts_comments = [(p.comments.count()) for p in latest_posts] 
-    latest_posts_reposts = [(p.reposts.count() + p.quotes.count()) for p in latest_posts] 
-    latest_posts_likes = [(p.likes.count()) for p in latest_posts]
-    latest_posts_bookmarks = [(p.bookmarks.count()) for p in latest_posts]
 
-    posts = create_combined_post(latest_posts, latest_posts_users, latest_posts_cu, latest_posts_comments, latest_posts_reposts, latest_posts_likes, latest_posts_bookmarks)
+    posts = create_combined_post(latest_posts)
 
-    
     context = {"latest_posts_list": posts,}
     return render(request, "homepage.html", context)
 
 @login_required
 def search(request):
     pass
+
+def view_explore(request):
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+
+    context = {"username": requester_cu.user_name}
+    return render(request, "explore.html", context)
 

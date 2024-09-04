@@ -29,7 +29,7 @@ def register_user(request):
             )
 
             login(request, new_user)
-            return redirect(reverse('home/'))
+            return redirect(reverse('homepage:home'))
     # if a GET (or anything other than POST), create blank form
     else:
         form = CustomUserCreationForm()

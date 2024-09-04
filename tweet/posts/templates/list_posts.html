@@ -1,20 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} {{ profile_data.username }}'s Profile {% endblock %}
-
 {% block content_wrapper %}
-<div class="container">
-    <div class="row">
-        {% include 'view_profile.html' with profile=profile_data %}
-
-        <nav class="nav nav-pills nav-justified">
-            <a class="nav-link" href="{% url 'profile:posts' profile_data.id %}">Posts</a>
-            <a class="nav-link" href="{% url 'profile:comments' profile_data.id %}">Replies</a>
-            <a class="nav-link" href="{% url 'profile:media' profile_data.id %}">Media</a>
-            <a class="nav-link active" href="#">Likes</a>
-        </nav>
-    </div>
     <div class="content-wrapper">
         {% if latest_posts_list %}
         {% for post in latest_posts_list %}
@@ -105,7 +92,6 @@
             <div id="quote" class="modal-dialog" hx-target="this"></div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block extra_css %}
