@@ -18,6 +18,7 @@ urlpatterns=[
     path("reomve-follow/<int:profile_id>/", views.remove_follow, name='remove_follow'),
     path("view-profile/<int:profile_id>/", views.view_profile, name='view_profile'),
     path("view-profile/", views.view_own_profile, name='my_profile'),
+    path("edit-profile/", views.edit_profile, name='edit_profile'),
     path("bookmarks/", views.view_user_bookmarks, name='bookmarks'),
     path("messages/", views.view_messages, name='view_messages'),
     path("notifications/", views.view_notifications, name='notifications'),

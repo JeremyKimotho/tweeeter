@@ -2,15 +2,46 @@
 
 <div class="container">
     <div class="row">
-        <p>{{ profile.username }}</p>
-        <p>{{ profile.bio }}</p>
-        <p>Followers: {{ profile.followers }}</p>
-        <p>Following: {{ profile.following }}</p>
-        <p>Location: {{ profile.location }}</p>
-        <p>{{ profile.display_name }}</p>
         <p>{{ profile.background }}</p>
-        <p>{{ profile.display_picture }}</p>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <p>{{ profile.display_picture }}</p>
+        </div> 
+        <div class="col-6" id="profile_buttons">
+            {% if profile.own_account %}
+                <button hx-get="{% url 'profile:edit_profile' %}" hx-target="#edit-profile">Edit Profile</button>
+            {% else %}
+                {% if profile.is_following %}
+                    <button>Following</button>
+                {% else %}
+                    <button>Follow</button>
+                {% endif %}
+            {% endif %}
+            {% if profile.is_followed %}
+                <span class="ml-auto">Follows you</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <span>{{ profile.display_name }}</span>
+        <p>@{{ profile.username }}</p>
+        
+        <p>
+            <span class="profile_ldj">Location: {{ profile.location }}</span>
+            <span class="profile_ldj">Date of Birth: {{ profile.dob | date:"F j, Y" }}</span>
+            <span class="profile_ldj">Joined: {{ profile.doj | date:"F j, Y" }}</span>
+        </p>
+        
+        <p>
+            <span class="profile_fl_fr">{{ profile.following }} Following</span>
+            <span class="profile_fl_fr">{{ profile.followers }} Followers</span>
+        </p>
     </div>
 </div>
 
+<!-- Edit Profile Modal -->
+<div id="edit-profile-modal" class="modal fade">
+    <div id="edit-profile" class="modal-dialog" hx-target="this"></div>
+</div>
 

@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse 
 
+from .templates.forms.profile_change_form import ProfileChangeForm
 from homepage.views import create_combined_post
 from posts.models import Comment
 from posts.models import Post
@@ -11,36 +12,50 @@ from users.models import CustomUser
 from user_profile.models import UserProfile
 
 
+def create_combined_profile(request, profile, account):
+    own_account_status = False
+    is_following = False
+    is_followed = False
+
+    if request.user.get_username() == account.get_username():
+        own_account_status = True
+    else:
+        requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+        requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+        if profile.followers.contains(requester):
+            is_following = True
+        if profile.following.contains(requester):
+            is_followed = True    
+
+    user_profile_stripped = {
+        "username": account.user_name,
+        "id": profile.id,
+        "bio": profile.bio,
+        "followers": profile.getFollowers(),
+        "following": profile.getFollowing(),
+        "location": profile.location,
+        "display_picture": profile.display_picture,
+        "display_name": profile.display_name,
+        "background": profile.background_picture,
+        "own_account": own_account_status,
+        "is_following": is_following,
+        "is_followed": is_followed,
+        "dob": account.date_of_birth,
+        "doj": account.date_joined,
+    }
+
+    return user_profile_stripped
+
 @login_required
 def view_profile(request, profile_id):
-    user_a = get_object_or_404(UserProfile, id=profile_id)
-    context = {
-               "bio": user_a.bio,
-               "followers": user_a.followers,
-               "following:": user_a.following,
-               "location": user_a.location,
-               "display_picture": user_a.display_picture,
-               "display_name": user_a.display_name,
-               "background": user_a.background_picture}
-    return render(request, "view_profile.html", context)
+    return redirect(reverse('profile:posts', args=(profile_id,)))
 
 @login_required
 def view_own_profile(request):
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     user_profile = get_object_or_404(UserProfile, user_id=requester_cu.id)
 
-    user_profile_stripped = {
-        "id": user_profile.id,
-        "bio": user_profile.bio,
-        "followers": user_profile.getFollowers(),
-        "following:": user_profile.getFollowing(),
-        "location": user_profile.location,
-        "display_picture": user_profile.display_picture,
-        "display_name": user_profile.display_name,
-        "background": user_profile.background_picture
-    }
-
-    return render(request,  "posts.html", context={"profile_data":user_profile_stripped, "username": requester_cu.user_name})
+    return redirect(reverse('profile:posts', args=(user_profile.id,)))
 
 @login_required
 def view_user_following(request, profile_id):
@@ -63,17 +78,7 @@ def view_user_posts(request, profile_id):
     user_profile  = get_object_or_404(UserProfile, id=profile_id)
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
-    user_profile_stripped = {
-        "username": user_cu.user_name,
-        "id": user_profile.id,
-        "bio": user_profile.bio,
-        "followers": user_profile.getFollowers(),
-        "following:": user_profile.getFollowing(),
-        "location": user_profile.location,
-        "display_picture": user_profile.display_picture,
-        "display_name": user_profile.display_name,
-        "background": user_profile.background_picture
-    }
+    user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
 
     latest_posts_list_raw = Post.objects.filter(poster_id=profile_id)
     latest_posts_list = create_combined_post(latest_posts_list_raw)
@@ -94,17 +99,7 @@ def view_user_comments(request, profile_id):
     user_profile  = get_object_or_404(UserProfile, id=profile_id)
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
-    user_profile_stripped = {
-        "username": user_cu.user_name,
-        "id": user_profile.id,
-        "bio": user_profile.bio,
-        "followers": user_profile.getFollowers(),
-        "following:": user_profile.getFollowing(),
-        "location": user_profile.location,
-        "display_picture": user_profile.display_picture,
-        "display_name": user_profile.display_name,
-        "background": user_profile.background_picture
-    }
+    user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
 
     latest_comments_list_raw = Comment.objects.filter(poster_id=profile_id)
     latest_comments_list = create_combined_post(latest_comments_list_raw)
@@ -125,17 +120,7 @@ def view_user_likes(request, profile_id):
     user_profile  = get_object_or_404(UserProfile, id=profile_id)
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
-    user_profile_stripped = {
-        "username": user_cu.user_name,
-        "id": user_profile.id,
-        "bio": user_profile.bio,
-        "followers": user_profile.getFollowers(),
-        "following:": user_profile.getFollowing(),
-        "location": user_profile.location,
-        "display_picture": user_profile.display_picture,
-        "display_name": user_profile.display_name,
-        "background": user_profile.background_picture
-    }
+    user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
 
     latest_likes_list_raw_p = Post.objects.filter(likes__id=profile_id)
     latest_likes_list_raw_q = Quote.objects.filter(likes__id=profile_id)
@@ -150,17 +135,7 @@ def view_user_media(request, profile_id):
     user_profile  = get_object_or_404(UserProfile, id=profile_id)
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
-    user_profile_stripped = {
-        "username": user_cu.user_name,
-        "id": user_profile.id,
-        "bio": user_profile.bio,
-        "followers": user_profile.getFollowers(),
-        "following:": user_profile.getFollowing(),
-        "location": user_profile.location,
-        "display_picture": user_profile.display_picture,
-        "display_name": user_profile.display_name,
-        "background": user_profile.background_picture
-    }
+    user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
 
     latest_media_list=[]
 
@@ -238,6 +213,38 @@ def view_notifications(request):
 
     context = {"username": requester_cu.user_name}
     return render(request, "notifications.html", context)
+
+
+@login_required
+def edit_profile(request):
+    if request.method == "POST":
+        form = ProfileChangeForm(request.POST)
+
+        if form.is_valid():
+            poster_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+            poster = get_object_or_404(UserProfile, user_id=poster_cu.id)
+
+            if form.cleaned_data['display_name'] != None:
+                poster.display_name=form.cleaned_data['display_name']
+            
+            if form.cleaned_data['location'] != None:
+                poster.location=form.cleaned_data['location']
+
+            if form.cleaned_data['bio'] != None:
+                poster.bio=form.cleaned_data['bio']
+                
+            if form.cleaned_data['date_of_birth'] != None:
+                poster_cu.date_of_birth=form.cleaned_data['date_of_birth']
+
+            poster.save()
+            poster_cu.save()
+
+        return HttpResponse(status=204)
+    
+    else:
+        form = ProfileChangeForm()
+
+    return render(request, "profile_edit.html", {"form": form})
 
 # def view_user_dp(request, profile_id):
 #     user = get_object_or_404(UserProfile, id=user_id)

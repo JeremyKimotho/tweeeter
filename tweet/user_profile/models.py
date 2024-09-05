@@ -19,7 +19,7 @@ class UserProfile(models.Model):
     followers = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='user_followers') 
     following = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='user_following') 
     display_picture = models.ImageField(upload_to='media/', blank=True, null=True, validators=[validate_file_type])
-    display_name = models.CharField(max_length=12, default='New User')
+    display_name = models.CharField(max_length=18, default='New User')
     bio = models.CharField(max_length=80, default='I\'m new here ! :)')
     background_picture = models.ImageField(upload_to='media/', blank=True, null=True, validators=[validate_file_type])
 

@@ -54,14 +54,6 @@
 
                             <!-- Second Button + Counter -->
                             <div class="col-3 d-flex justify-content-center align-items-center">
-                                <!-- <div class="dropdown">
-                                    <button id="toggleButton" class="dropbtn">Repost</button>
-                                    <div id="dropdownContent" class="dropdown-content">
-                                        <button id="repost_button" data-t-url="{% url 'posts:repost' post.post.id %}" data-f-url="{% url 'posts:unrepost' post.post.id %}"><span class="ms-2" id="post-repost-dd">Repost</span></button>
-                                        <button id="quote_button" data-url="{% url 'posts:quote' post.post.id %}">Quote</button>
-                                    </div>
-                                    <span class="ms-2" id="post-reposts">{{ post.reposts_count }}</span> 
-                                </div> -->
                                 <!-- Split dropup button -->
                                 <div class="btn-group dropup">
                                     <a class="btn btn-secondary dropdown" href="#" hx-get="{% url 'posts:repost' post.post.id %}" hx-target="#post-reposts-{{ post.post.id }}" role="button">Repost</a>
@@ -110,8 +102,10 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/list_posts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/view_profile.css' %}">
 {% endblock %}
 
 {% block extra_js %}
     <script src="{% static 'js/list_posts.js' %}"></script>
+    <script src="{% static 'js/view_profile.js' %}"></script>
 {% endblock %}
