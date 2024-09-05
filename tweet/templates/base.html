@@ -12,24 +12,33 @@
     <!-- Base CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
+    <!-- Font Awesome Icons CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
     <!-- Optional CSS -->
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-3 d-flex flex-column justify-content-center align-items-left">
-                <!-- Navigation Bar -->
-                <ul>
-                    <li><a href="{% url 'homepage:home' %}">Home</a></li>
-                    <li><a href="{% url 'homepage:explore' %}">Explore</a></li>
-                    <li><a href="{% url 'profile:notifications' %}">Notifications</a></li>
-                    <li><a href="{% url 'profile:bookmarks' %}">Bookmarks</a></li>
-                    <li><a href="{% url 'profile:my_profile' %}">Profile</a></li>
-                    <li><a href="about.asp">More</a></li>
-                    <li><button hx-get="{% url 'posts:create_post' %}" hx-target="#dialog">Post</button></li>
-                    <li><a href="{% url 'users:logout' %}">Logout</a></li>
-                </ul>
+            <div class="col-3 d-flex flex-column navbar-base">
+                <div class="col-2"></div>
+                <div class="col-8 text-center">
+                    <!-- Navigation Bar -->
+                    <ul>
+                        <li><a href="{% url 'homepage:home' %}">Home</a></li>
+                        <li><a href="{% url 'homepage:explore' %}">Explore</a></li>
+                        <li><a href="{% url 'profile:notifications' %}">Notifications</a></li>
+                        <li><a href="{% url 'profile:bookmarks' %}">Bookmarks</a></li>
+                        <li><a href="{% url 'profile:my_profile' %}">Profile</a></li>
+                        <li><a href="about.asp">More</a></li>
+                        <li><button hx-get="{% url 'posts:create_post' %}" hx-target="#dialog">Post</button></li>
+                        <li><a href="{% url 'users:logout' %}">Logout</a></li>
+                        <li><a href="{% url 'homepage:populate' %}" style="color:red">Populate</a></li>
+                    </ul>
+                </div>
+                <div class="col-2"></div>
             </div>
             <div class="col-6 d-flex flex-column justify-content-center align-items-center">
                 <!-- Main Content Area -->

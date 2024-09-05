@@ -210,3 +210,4 @@ def delete_post(request, post_id):
     else:
         return redirect(reverse('homepage:home')) # homepage
 
+

@@ -18,4 +18,4 @@ urlpatterns=[
     path("delete-post/<int:post_id>/", views.delete_post, name='unpost'),
     path("create-post/", views.create_post, name='create_post'),
     path("get-comments-count/<int:post_id>/", views.get_comments_count, name="get_comments_count"),
-]
+] 

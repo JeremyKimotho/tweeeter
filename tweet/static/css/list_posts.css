@@ -1,18 +1,105 @@
 .card {
-    margin-top: 15%;
-    border: 2px solid grey;
+    border: 0.5px solid light grey;
+    border-radius: 0%;
 }
 
-.dropdown-menu {
-    margin-top: -50%;
-    padding-left: -10px;
+#profile-pic {
+    max-width: 75%;
+    max-height:75%;
+}
+
+#profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#post-buttons {
+    text-align: right;
+}
+
+.profile-info-text {
+    margin-left: -7%; 
+}
+
+.profile-ldj {
+    font-weight:bold;
+    font-size:15px;
+    text-align: left;
+}
+
+.profile-ldj-light {
+    font-size:15px;
+    color: grey;
+    font-weight:300
+}
+
+.card-header {
+    padding-bottom:0;
+    background-color: white;
+    border:none;
+}
+
+.card-body {
     padding-top: 0;
-    max-height: 100%;
-    height:auto;
-    overflow-y: hidden;
+    padding-bottom: 0;
+    margin-top:-4%;
 }
 
-.dropdown-item {
-    width: 10px;
-    white-space: nowrap;
+.card-footer {
+    background-color: white;
+    border: none;
 }
+
+.default-icon {
+    color:grey;
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    display: inline-block; 
+    font-size: 15px;
+}
+
+.fa-heart:hover {
+    color: #e74c3c; /* Red color */
+    box-shadow: 0 0 30px rgba(231, 76, 60, 0.7); /* Red glow */
+    transform: scale(1.1); /* Optional: Slightly increase size on hover */
+    background-color: whitesmoke;
+}
+
+.fa-comment:hover {
+    color: #3498db; /* Light blue color */
+    box-shadow: 0 0 30px rgba(52, 152, 219, 0.7); /* Light blue glow */
+    transform: scale(1.1); /* Optional: Slightly increase size on hover */
+    background-color: whitesmoke;
+}
+
+.fa-star:hover {
+    color: #f1c40f; /* Gold color */
+    box-shadow: 0 0 30px rgba(241, 196, 15, 0.7); /* Gold glow */
+    transform: scale(1.1);
+    background-color: whitesmoke;
+}
+
+.fa-retweet:hover {
+    color: #2ecc71; /* Muted green color */
+    box-shadow: 0 0 30px rgba(46, 204, 113, 0.7); /* Muted green glow */
+    transform: scale(1.1);
+    background-color: whitesmoke;
+}
+
+.reposted-icon-change {
+    color: #2ecc71; /* Muted green color */
+}
+
+.liked-icon-change {
+    color: #e74c3c; /* Red color */
+}
+
+.bookmarked-icon-change {
+    color: #f1c40f; /* Gold color */
+}
+
+.content-wrapper button {
+    border:none;
+    background-color: white;
+}
+

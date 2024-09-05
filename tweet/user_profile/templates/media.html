@@ -22,50 +22,58 @@
                 <div class="card-header">
                     <div class="container">
                         <div class="row text-center">
-                            <div class="col-2">
-                                <!-- dp here -->
+                            <div class="col-2" id="profile-pic">
+                                <div class="col-2"></div>
+                                <div class="col-8">
+                                    <img class="img-fluid rounded-circle" src="{% static 'images/user1.avif' %}" alt="profile picture">
+                                </div>
+                                <div class="col-2"></div>
                             </div>
-                            <div class="col-3">
-                                <h5 class="post-poster-dn">{{ post.poster_profile.display_name }}</h3>
+                            <div class="col-8 text-start profile-info-text">
+                                <span class="profile-ldj">{{ post.poster_profile.display_name }}</span>
+                                <span class="profile-ldj-light">@{{ post.poster_account.username }}</span>
+                                <span class="profile-ldj-light">· {{ post.post.pub_date | date:"F j, Y" }}</span>
                             </div>
-                            <div class="col-3">
-                                <h5 class="post-poster-username">@{{ post.poster_account.username }}</h3>
-                            </div>
-                            <div class="col-2">
-                                <h5 class="post-pub-date">{{ post.post.pub_date }}</h3>
+                            <div class="col-2" id="post-buttons">
+                                <button>Details</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="post-body-text">{{ post.post.body }}</p>
-                    <footer class="blockquote-footer">
-                        Will add a lil something in here too in a sec...
-                    </footer>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-2"></div>
+                            <div class="col-10 text-start profile-info-text">
+                                <p class="post-body-text">
+                                    {{ post.post.body }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer text-body-secondary">
                     <div class="container">
                         <div class="row text-center">
                             <!-- First Button + Counter -->
                             <div class="col-3 d-flex justify-content-center align-items-center">
-                                <button id="comment_button" data-id="post.post.id" data-url="{% url 'posts:get_comments_count' post.post.id %}" hx-get="{% url 'posts:comment' post.post.id %}" hx-target="#comment">Comment</button>
+                                <button id="comment_button" data-id="post.post.id" data-url="{% url 'posts:get_comments_count' post.post.id %}" hx-get="{% url 'posts:comment' post.post.id %}" hx-target="#comment">
+                                    <!-- Comment Icon-->
+                                    <i class="fa-regular fa-comment default-icon"></i>
+                                </button>
                                 <span class="ms-2" id="post-comments-{{ post.post.id }}">{{ post.comments_count }}</span> <!-- Counter or any text -->
                             </div>
 
                             <!-- Second Button + Counter -->
                             <div class="col-3 d-flex justify-content-center align-items-center">
-                                <!-- <div class="dropdown">
-                                    <button id="toggleButton" class="dropbtn">Repost</button>
-                                    <div id="dropdownContent" class="dropdown-content">
-                                        <button id="repost_button" data-t-url="{% url 'posts:repost' post.post.id %}" data-f-url="{% url 'posts:unrepost' post.post.id %}"><span class="ms-2" id="post-repost-dd">Repost</span></button>
-                                        <button id="quote_button" data-url="{% url 'posts:quote' post.post.id %}">Quote</button>
-                                    </div>
-                                    <span class="ms-2" id="post-reposts">{{ post.reposts_count }}</span> 
-                                </div> -->
-                                <!-- Split dropup button -->
                                 <div class="btn-group dropup">
-                                    <a class="btn btn-secondary dropdown" href="#" hx-get="{% url 'posts:repost' post.post.id %}" hx-target="#post-reposts-{{ post.post.id }}" role="button">Repost</a>
-                                    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button hx-get="{% url 'posts:repost' post.post.id %}" hx-target="#post-reposts-{{ post.post.id }}">
+                                        <!-- Repost Icon: Unreposted State -->
+                                        <i class="fa-solid fa-retweet default-icon"></i>
+                                        <!-- Repost Icon: Reposted State -->
+                                        <!-- <i class="fa-solid fa-retweet reposted-icon-change"></i>  -->
+                                    </button>
+                                    <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <ul class="dropdown-menu">
@@ -78,13 +86,23 @@
 
                             <!-- Third Button + Counter -->
                             <div class="col-3 d-flex justify-content-center align-items-center">
-                                <button hx-get="{% url 'posts:like' post.post.id %}" hx-target="#post-likes-{{ post.post.id }}">Like</button>
+                                <button hx-get="{% url 'posts:like' post.post.id %}" hx-target="#post-likes-{{ post.post.id }}">
+                                    <!-- Like Icon: Unliked State -->
+                                    <i class="fa-regular fa-heart default-icon"></i>
+                                    <!-- Like Icon: Liked State -->
+                                    <!-- <i class="fa-solid fa-heart liked-icon-change"></i>  -->
+                                </button>
                                 <span class="ms-2" id="post-likes-{{ post.post.id }}">{{ post.likes_count }}</span> <!-- Counter or any text -->
                             </div>
 
                             <!-- Fourth Button + Counter -->
                             <div class="col-3 d-flex justify-content-center align-items-center">
-                            <button hx-get="{% url 'posts:bookmark' post.post.id %}" hx-target="#post-bookmarks-{{ post.post.id }}">Bookmark</button>
+                            <button hx-get="{% url 'posts:bookmark' post.post.id %}" hx-target="#post-bookmarks-{{ post.post.id }}">
+                                <!-- Bookmark Icon: Unbookmark State -->
+                                <i class="fa-regular fa-star default-icon"></i>
+                                <!-- Bookmark Icon: Bookmarked State -->
+                                <!-- <i class="fa-solid fa-star bookmarked-icon-change"></i>  -->
+                            </button>
                             <span class="ms-2" id="post-bookmarks-{{ post.post.id }}">{{ post.bookmarks_count }}</span> <!-- Counter or any text -->
                             </div>
                         </div>
@@ -93,17 +111,8 @@
             </div>
         {% endfor %}
         {% else %}
-            <!-- <p class="homepage-no-posts-text">Nothing here...</p> -->
-            <div style="text-align: center; margin-top: 100px;">
-                <h1 style="font-size: 3rem;">🚧 Under Construction 🚧</h1>
-                <p style="font-size: 1.5rem;">
-                    We're working hard to build something awesome! 🛠️ <br>
-                    Please check back soon for updates. 😊
-                </p>
-                <img src="{% static 'images/under_construction.gif' %}" alt="Under Construction" style="margin-top: 20px; max-width: 220px;">
-            </div>
+            <p class="homepage-no-posts-text">Nothing here...</p>
         {% endif %}
-
         <!-- Create Comment Modal -->
         <div id="comment-modal" class="modal fade">
             <div id="comment" class="modal-dialog" hx-target="this"></div>

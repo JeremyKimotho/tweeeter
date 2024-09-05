@@ -22,8 +22,6 @@ def register_user(request):
             new_user = CustomUser.objects.create_user(
                 email=form.cleaned_data['email'],
                 user_name=form.cleaned_data['user_name'],
-                first_name=form.cleaned_data['first_name'],
-                last_name=form.cleaned_data['last_name'],
                 date_of_birth=form.cleaned_data['date_of_birth'],
                 password=form.cleaned_data['password1'],
             )
