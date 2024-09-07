@@ -1,13 +1,14 @@
 {% load static %}
 
 <div class="container">
-    <div class="row">
-        <p>{{ profile.background }}</p>
+    <div class="row background-img-div">
+        <!-- <img class="img-fluid" src="{% static 'images/bg_4.jpg' %}" alt="background picture"></a> -->
     </div>
-    <div class="row">
-        <div class="col-6">
-            <p>{{ profile.display_picture }}</p>
-        </div> 
+    <div class="row profile-content-div">
+        <div class="col-3">
+            <img class="img-fluid rounded-circle" src="{% static 'images/user1.avif' %}" alt="profile picture"></a>
+        </div>
+        <div class="col-3"></div> 
         <div class="col-6" id="profile_buttons">
             {% if profile.own_account %}
                 <button hx-get="{% url 'profile:edit_profile' %}" hx-target="#edit-profile">Edit Profile</button>
@@ -24,18 +25,24 @@
         </div>
     </div>
     <div class="row">
-        <span>{{ profile.display_name }}</span>
-        <p>@{{ profile.username }}</p>
+        <p></p>
+        <span class="profile-displayname-text">{{ profile.display_name }}</span>
+        <p class="profile-ldj-text">@{{ profile.username }}</p>
+
+        <p>{{ profile.bio }}</p>
         
         <p>
-            <span class="profile_ldj">Location: {{ profile.location }}</span>
-            <span class="profile_ldj">Date of Birth: {{ profile.dob | date:"F j, Y" }}</span>
-            <span class="profile_ldj">Joined: {{ profile.doj | date:"F j, Y" }}</span>
+            <span><i class="fa-solid fa-location-dot"></i></span><span class="profile-ldj-text"> {{ profile.location }}</span>
+            <span class="profile-fl-fr-blank"></span>
+            <span><i class="fa-solid fa-cake-candles"></i></span><span class="profile-ldj-text"> Born {{ profile.dob | date:"F j, Y" }}</span>
+            <span class="profile-fl-fr-blank"></span>
+            <span><i class="fa-regular fa-calendar"></i></span><span class="profile-ldj-text"> Joined {{ profile.doj | date:"F Y" }}</span>
         </p>
         
         <p>
-            <span class="profile_fl_fr">{{ profile.following }} Following</span>
-            <span class="profile_fl_fr">{{ profile.followers }} Followers</span>
+            <span class="profile-fl-fr-numbers">{{ profile.following }}</span><span class="profile-fl-fr-text"> Following</span>
+            <span class="profile-fl-fr-blank"></span>
+            <span class="profile-fl-fr-numbers">{{ profile.followers }}</span><span class="profile-fl-fr-text"> Followers</span>
         </p>
     </div>
 </div>

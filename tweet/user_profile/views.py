@@ -83,7 +83,7 @@ def view_user_posts(request, profile_id):
     latest_posts_list_raw = Post.objects.filter(poster_id=profile_id)
     latest_posts_list = create_combined_post(latest_posts_list_raw)
 
-    context = {"latest_posts_list": latest_posts_list, "profile_data": user_profile_stripped,}
+    context = {"latest_posts": latest_posts_list, "profile_data": user_profile_stripped,}
     return render(request, "posts.html", context)
 
 
@@ -104,7 +104,7 @@ def view_user_comments(request, profile_id):
     latest_comments_list_raw = Comment.objects.filter(poster_id=profile_id)
     latest_comments_list = create_combined_post(latest_comments_list_raw)
 
-    context = {"latest_posts_list": latest_comments_list, "profile_data": user_profile_stripped,}
+    context = {"latest_posts": latest_comments_list, "profile_data": user_profile_stripped,}
     return render(request, "comments.html", context)
 
 
@@ -127,7 +127,7 @@ def view_user_likes(request, profile_id):
     latest_likes_list_raw_c = Comment.objects.filter(likes__id=profile_id)
     latest_likes_list = create_combined_post(latest_likes_list_raw_p) + create_combined_post(latest_likes_list_raw_q) + create_combined_post(latest_likes_list_raw_c)
 
-    context = {"latest_posts_list": latest_likes_list, "profile_data": user_profile_stripped,}
+    context = {"latest_posts": latest_likes_list, "profile_data": user_profile_stripped,}
     return render(request, "likes.html", context)
 
 @login_required
@@ -139,7 +139,7 @@ def view_user_media(request, profile_id):
 
     latest_media_list=[]
 
-    context = {"latest_posts_list": latest_media_list, "profile_data": user_profile_stripped,}
+    context = {"latest_posts": latest_media_list, "profile_data": user_profile_stripped,}
     return render(request, "media.html", context)
 
 
@@ -151,7 +151,7 @@ def view_user_bookmarks(request):
     latest_posts_raw = Post.objects.filter(bookmarks__id=requester.id)
     latest_posts = create_combined_post(latest_posts_raw)
 
-    context = {"latest_posts_list": latest_posts, "username": requester_cu.user_name}
+    context = {"latest_posts": latest_posts, "username": requester_cu.user_name}
     return render(request, "bookmarks.html", context)
 
 

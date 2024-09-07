@@ -12,6 +12,28 @@ from posts.models import Quote
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
+def time_since_post(post):
+    now = timezone.now()
+    time_diff = now - post.date_posted
+
+    if time_diff < datetime.timedelta(minutes=1):
+        # Less than a minute ago
+        seconds = int(time_diff.total_seconds())
+        return f"{seconds}s"
+    
+    elif time_diff < datetime.timedelta(hours=1):
+        # Less than an hour ago
+        minutes = int(time_diff.total_seconds() / 60)
+        return f"{minutes}m"
+    
+    elif time_diff < datetime.timedelta(hours=24):
+        # Less than 24 hours ago
+        hours = int(time_diff.total_seconds() / 3600)
+        return f"{hours}h"
+    
+    else:
+        return None
+
 def create_combined_post(posts):
     users = [get_object_or_404(UserProfile, id=p.poster_id) for p in posts]
     cusers = [get_object_or_404(CustomUser, id=u.user_id) for u in users]
@@ -29,10 +51,14 @@ def create_combined_post(posts):
             "id":post.id,
             "body":post.body,
             "pub_date":post.date_posted,
+            "time_since":time_since_post(post)
         }
+
+
 
         # Take only the data we need from user profile object
         profile_stripped = {
+            "id":profile.id,
             "display_name":profile.display_name,
             "display_picture":profile.display_picture,
             "background_picture":profile.background_picture,
@@ -71,11 +97,11 @@ def view_posts(request):
 
     # latest_posts = [get_object_or_404(Post, id=pt_post.post_id) for pt_post in latest_posts_pt]
 
-    latest_posts = Post.objects.all()[:20]
+    latest_posts = Post.objects.all().order_by("-date_posted")[:20]
 
     posts = create_combined_post(latest_posts)
 
-    context = {"latest_posts_list": posts,}
+    context = {"latest_posts": posts,}
     return render(request, "homepage.html", context)
 
 @login_required

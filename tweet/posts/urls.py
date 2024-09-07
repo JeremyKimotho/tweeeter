@@ -4,7 +4,7 @@ from . import views
 
 app_name="posts"
 urlpatterns=[
-    path("view-post/<int:post_id>/", views.display_post),
+    path("view-post/<int:post_id>/<int:post_op_id>/", views.display_post, name='display_post'),
     path("create-repost/<int:post_id>/", views.create_repost, name='repost'),
     path("delete-repost/<int:post_id>/", views.delete_repost, name='unrepost'),
     path("create-like/<int:post_id>/", views.create_like, name='like'),

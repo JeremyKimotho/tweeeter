@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse 
 
+from homepage.views import create_combined_post
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
@@ -11,9 +12,22 @@ from user_profile.models import UserProfile
 
 from .templates.forms.post_form import NewPostForm
 
-def display_post(request, post_id):
+@login_required
+def display_post(request, post_id, post_op_id):
     post = get_object_or_404(Post, id=post_id)
-    return render(request, "display_post.html", {post: "post"})
+    
+    # get comments, filter out op comments from others
+    latest_comments_raw = post.comments.all()
+    latest_comments_op = latest_comments_raw.filter(poster_id=post_op_id)
+    latest_comments_all = latest_comments_raw.exclude(poster_id=post_op_id)
+
+    og_post_info = create_combined_post([post])
+    op_post_comments = create_combined_post(latest_comments_op)
+    latest_comments = create_combined_post(latest_comments_all)
+
+    context = {'og_post':og_post_info, 'op_comments':op_post_comments, 'latest_comments_list':latest_comments}
+
+    return render(request, "display_post.html", context)
 
 @login_required
 def create_like(request, post_id):
