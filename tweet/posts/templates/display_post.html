@@ -8,6 +8,14 @@
             <div class="card">
                 <div class="card-header">
                     <div class="container">
+                        <div class="row back-button-div">
+                            <div class="col-1">
+                                <button onclick="window.location.href='{% url 'profile:back' %}'"><i class="fa-solid fa-arrow-left-long fa-xl"></i></button>
+                            </div>
+                            <div class="col-11">
+                                <span class="post-displayname-text">Post</span>
+                            </div>
+                        </div>
                         <div class="row text-center">
                             <div class="col-2" id="profile-pic">
                                 <div class="col-2"></div>

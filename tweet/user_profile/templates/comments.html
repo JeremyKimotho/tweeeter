@@ -5,9 +5,8 @@
 
 {% block content_wrapper %}
 <div class="container">
-    <div class="row">
-        {% include 'view_profile.html' with profile=profile_data %}
-
+    <div class="row">{% include 'view_profile.html' with profile=profile_data %}</div>
+    <div class="row profile-posts-content">
         <nav class="nav nav-pills nav-justified">
             <a class="nav-link" href="{% url 'profile:posts' profile_data.id %}">Posts</a>
             <a class="nav-link active" href="#">Replies</a>

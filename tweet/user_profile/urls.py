@@ -22,4 +22,5 @@ urlpatterns=[
     path("bookmarks/", views.view_user_bookmarks, name='bookmarks'),
     path("messages/", views.view_messages, name='view_messages'),
     path("notifications/", views.view_notifications, name='notifications'),
+    path("go-back", views.go_back, name="back"),
 ]

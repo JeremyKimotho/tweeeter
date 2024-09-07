@@ -1,5 +1,6 @@
 #profile_buttons {
     text-align:right;
+    padding-top: 12%;
 }
 
 .profile-fl-fr-numbers {
@@ -25,11 +26,41 @@
     font-weight:bold;
 }
 
-/* .background-img-div {
-    z-index:1;
+.background-img-div {
+    position: relative;
+    background-size: cover; /* Ensure background image covers the area */
+    background-position: center; /* Center the background image */
+    height: 33%;
+    width: 100%;
+    padding-top: 12%
 }
 
 .profile-content-div {
-    z-index: 2; 
-    clip-path: circle(50% at 50% 50%); 
-} */
+    margin-top: -9.5%;
+}
+
+.profile-content-div img {
+    z-index:1;
+    border:5px solid white;
+    position: relative;
+}
+
+.back-button-div {
+    background-color: white;
+    border: 0.5px solid light grey;
+    height: 13%;
+}
+
+.back-button-div button {
+    border:none;
+    background-color: white;
+    margin-top:50%;
+}
+
+.back-button-div .col-11 {
+    padding-left:3.5%;
+}
+
+.profile-posts-content { 
+    padding-top:12%;
+}

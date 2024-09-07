@@ -5,29 +5,28 @@
 
 {% block content_wrapper %}
 <div class="container">
-    <div class="row">
-        {% include 'view_profile.html' with profile=profile_data %}
-
+    <div class="row">{% include 'view_profile.html' with profile=profile_data %}</div>
+    <div class="row profile-posts-content">
         <nav class="nav nav-pills nav-justified">
             <a class="nav-link active" href="#">Posts</a>
             <a class="nav-link" href="{% url 'profile:comments' profile_data.id %}">Replies</a>
             <a class="nav-link" href="{% url 'profile:media' profile_data.id %}">Media</a>
             <a class="nav-link" href="{% url 'profile:likes' profile_data.id %}">Likes</a>
         </nav>
-    </div>
-    <div class="content-wrapper">
-        <p></p>
-        {% if latest_posts %}
-        {% include 'post_individual.html' with latest_posts_list=latest_posts%}
-        {% endif %}
-        <!-- Create Comment Modal -->
-        <div id="comment-modal" class="modal fade">
-            <div id="comment" class="modal-dialog" hx-target="this"></div>
-        </div>
-        
-        <!-- Create Quote Modal -->
-        <div id="quote-modal" class="modal fade">
-            <div id="quote" class="modal-dialog" hx-target="this"></div>
+        <div class="content-wrapper">
+            <p></p>
+            {% if latest_posts %}
+            {% include 'post_individual.html' with latest_posts_list=latest_posts%}
+            {% endif %}
+            <!-- Create Comment Modal -->
+            <div id="comment-modal" class="modal fade">
+                <div id="comment" class="modal-dialog" hx-target="this"></div>
+            </div>
+            
+            <!-- Create Quote Modal -->
+            <div id="quote-modal" class="modal fade">
+                <div id="quote" class="modal-dialog" hx-target="this"></div>
+            </div>
         </div>
     </div>
 </div>

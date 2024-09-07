@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse 
+from urllib.parse import urlparse
 
 from .templates.forms.profile_change_form import ProfileChangeForm
 from homepage.views import create_combined_post
@@ -11,8 +12,34 @@ from posts.models import Quote
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
+def format_number(num=None):
+    if num is None:
+        num = 55555555
 
-def create_combined_profile(request, profile, account):
+    # If number is less than 1000, return it as it is
+    if num < 1000:
+        return str(num)
+    
+    # If number is in thousands (less than a million)
+    elif num < 1_000_000:
+        # Divide by 1000 and round to one decimal place if necessary
+        formatted = round(num / 1000, 1)
+        # Return without decimal if it's a whole number
+        return f"{int(formatted)}K" if formatted.is_integer() else f"{formatted}K"
+    
+    # If number is in millions (less than a billion)
+    elif num < 1_000_000_000:
+        # Divide by 1,000,000 and round to one decimal place if necessary
+        formatted = round(num / 1_000_000, 1)
+        # Return without decimal if it's a whole number
+        return f"{int(formatted)}M" if formatted.is_integer() else f"{formatted}M"
+    
+    # In case of numbers greater than a billion, you can extend this logic for billions
+    else:
+        return str(num)
+
+
+def create_combined_profile(request, profile, account, posts_count=None):
     own_account_status = False
     is_following = False
     is_followed = False
@@ -42,6 +69,7 @@ def create_combined_profile(request, profile, account):
         "is_followed": is_followed,
         "dob": account.date_of_birth,
         "doj": account.date_joined,
+        "posts_count": format_number(posts_count)
     }
 
     return user_profile_stripped
@@ -78,10 +106,10 @@ def view_user_posts(request, profile_id):
     user_profile  = get_object_or_404(UserProfile, id=profile_id)
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
-    user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
-
     latest_posts_list_raw = Post.objects.filter(poster_id=profile_id)
     latest_posts_list = create_combined_post(latest_posts_list_raw)
+
+    user_profile_stripped = create_combined_profile(request, user_profile, user_cu, len(latest_posts_list))
 
     context = {"latest_posts": latest_posts_list, "profile_data": user_profile_stripped,}
     return render(request, "posts.html", context)
@@ -99,10 +127,10 @@ def view_user_comments(request, profile_id):
     user_profile  = get_object_or_404(UserProfile, id=profile_id)
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
-    user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
-
     latest_comments_list_raw = Comment.objects.filter(poster_id=profile_id)
     latest_comments_list = create_combined_post(latest_comments_list_raw)
+
+    user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
 
     context = {"latest_posts": latest_comments_list, "profile_data": user_profile_stripped,}
     return render(request, "comments.html", context)
@@ -254,5 +282,16 @@ def edit_profile(request):
 # def user_media(request, profile_id):
 #     pass
 
-    
+def go_back(request):
+    back_page = request.META.get('HTTP_REFERER')
 
+    if back_page:
+        bp_domain = urlparse(back_page).netloc
+        current_domain = request.get_host()
+
+        print(f"BP domain {bp_domain}, CD is {current_domain}")
+
+        if bp_domain == current_domain:
+            return redirect(back_page)
+        
+    return redirect(reverse('homepage:home'))

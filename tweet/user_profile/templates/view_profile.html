@@ -1,10 +1,17 @@
 {% load static %}
 
 <div class="container">
-    <div class="row background-img-div">
-        <!-- <img class="img-fluid" src="{% static 'images/bg_4.jpg' %}" alt="background picture"></a> -->
+    <div class="row back-button-div">
+        <div class="col-1">
+            <button onclick="window.location.href='{% url 'profile:back' %}'"><i class="fa-solid fa-arrow-left-long fa-xl"></i></button>
+        </div>
+        <div class="col-11">
+            <span class="profile-displayname-text">{{ profile.display_name }}</span>
+            <p class="profile-fl-fr-text">{{ profile.posts_count }} posts</p>
+        </div>
     </div>
-    <div class="row profile-content-div">
+    <div class="row background-img-div" style="background-image: url('{% static 'images/bg_2.jpg' %}');"></div>
+    <div class="row profile-content-div" >
         <div class="col-3">
             <img class="img-fluid rounded-circle" src="{% static 'images/user1.avif' %}" alt="profile picture"></a>
         </div>

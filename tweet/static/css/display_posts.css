@@ -1,3 +1,22 @@
 .card-body {
     margin-top:-1%
 }
+
+.post-displayname-text {
+    font-size:20px;
+    font-weight: bold;
+}
+
+.back-button-div {
+    background-color: white;
+    padding-bottom: 3.5%;
+}
+
+.back-button-div button {
+    border:none;
+    background-color: white;
+}
+
+.back-button-div .col-11 {
+    padding-left:3.5%;
+}
