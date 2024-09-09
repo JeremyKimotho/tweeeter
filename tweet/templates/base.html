@@ -23,22 +23,98 @@
     <div class="container">
         <div class="row">
             <div class="col-3 d-flex flex-column navbar-base">
-                <div class="col-2"></div>
-                <div class="col-8 text-center">
+                <div class="col-12">
                     <!-- Navigation Bar -->
-                    <ul>
-                        <li><a href="{% url 'homepage:home' %}">Home</a></li>
-                        <li><a href="{% url 'homepage:explore' %}">Explore</a></li>
-                        <li><a href="{% url 'profile:notifications' %}">Notifications</a></li>
-                        <li><a href="{% url 'profile:bookmarks' %}">Bookmarks</a></li>
-                        <li><a href="{% url 'profile:my_profile' %}">Profile</a></li>
-                        <li><a href="about.asp">More</a></li>
-                        <li><button hx-get="{% url 'posts:create_post' %}" hx-target="#dialog">Post</button></li>
-                        <li><a href="{% url 'users:logout' %}">Logout</a></li>
-                        <li><a href="{% url 'homepage:populate' %}" style="color:red">Populate</a></li>
-                    </ul>
+                    <div class="row">
+                        <div class="col-7">
+                            <a href="{% url 'homepage:home' %}">
+                                <img src="{% static 'images/logo.png' %}" alt="logo">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <ul>
+                                <li>
+                                    <button onclick="window.location.href='{% url 'homepage:home' %}'">
+                                        <span class="navbar-buttons">
+                                            <i class="fa-solid fa-house"></i>
+                                            <h3>Home</h3>
+                                        </span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button onclick="window.location.href='{% url 'homepage:explore' %}'">
+                                        <span class="navbar-buttons">
+                                            <i class="fa-regular fa-compass"></i>
+                                            <h3>Explore</h3>
+                                        </span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button onclick="window.location.href='{% url 'profile:notifications' %}'">
+                                        <span class="navbar-buttons">
+                                            <i class="fa-regular fa-bell"></i>
+                                            <h3>Notifications</h3>
+                                        </span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button onclick="window.location.href='{% url 'profile:bookmarks' %}'">
+                                        <span class="navbar-buttons">
+                                            <i class="fa-regular fa-bookmark"></i>
+                                            <h3>Bookmarks</h3>
+                                        </span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button onclick="window.location.href='{% url 'profile:my_profile' %}'">
+                                        <span class="navbar-buttons">
+                                            <i class="fa-regular fa-user"></i>
+                                            <h3>Profile</h3>
+                                        </span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button onclick="">
+                                        <span class="navbar-buttons">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                            <h3>Settings</h3>
+                                        </span>
+                                    </button>
+                                </li>
+                                <li>
+                                
+                                </li>
+                                <li>
+                                    
+                                </li>
+                                <li id="logout-button">
+                                    
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row" id="post-button-nav" hx-get="{% url 'posts:create_post' %}" hx-target="#dialog">
+                        <button>
+                            <h3>Post</h3>
+                        </button>
+                    </div>
+
+                    <div class="row" id="populate-button-nav">
+                        <button hx-get="{% url 'homepage:populate' %}">
+                            <h3>Populate</h3>
+                        </button>
+                    </div>
+
+                    <div class="row" id="logout-button-nav">
+                        <button hx-get="{% url 'users:logout' %}">
+                            <h3>Logout</h3>
+                        </button>
+                    </div>
+
+                    <!-- End of Navigation Bar -->
                 </div>
-                <div class="col-2"></div>
             </div>
             <div class="col-6 d-flex flex-column justify-content-center align-items-center">
                 <!-- Main Content Area -->
