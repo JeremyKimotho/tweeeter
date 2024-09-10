@@ -23,4 +23,5 @@ urlpatterns=[
     path("messages/", views.view_messages, name='view_messages'),
     path("notifications/", views.view_notifications, name='notifications'),
     path("go-back", views.go_back, name="back"),
+    path("manage-follows/<int:profile_id>/", views.manage_follows, name="follow_user")
 ]

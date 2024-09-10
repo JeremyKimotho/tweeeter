@@ -4,14 +4,30 @@
 {% block title %} {{ profile_data.username }}'s Profile {% endblock %}
 
 {% block content_wrapper %}
-<div class="container">
+<div class="container profile-all-content">
     <div class="row">{% include 'view_profile.html' with profile=profile_data %}</div>
     <div class="row profile-posts-content">
         <nav class="nav nav-pills nav-justified">
-            <a class="nav-link" href="{% url 'profile:posts' profile_data.id %}">Posts</a>
-            <a class="nav-link" href="{% url 'profile:comments' profile_data.id %}">Replies</a>
-            <a class="nav-link active" href="#">Media</a>
-            <a class="nav-link" href="{% url 'profile:likes' profile_data.id %}">Likes</a>
+            <a class="nav-link" href="{% url 'profile:posts' profile_data.id %}">
+                Posts
+            
+                <div class="bottom-border-central"></div>
+            </a>
+            <a class="nav-link" href="{% url 'profile:comments' profile_data.id %}">
+                Replies
+
+                <div class="bottom-border-central"></div>
+            </a>
+            <a class="nav-link active" href="">
+                Media
+
+                <div class="bottom-border-central"></div>
+            </a>
+            <a class="nav-link" href="{% url 'profile:likes' profile_data.id %}">
+                Likes
+
+                <div class="bottom-border-central"></div>
+            </a>
         </nav>
     </div>
     <div class="content-wrapper">

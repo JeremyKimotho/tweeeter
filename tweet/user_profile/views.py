@@ -107,7 +107,10 @@ def view_user_posts(request, profile_id):
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
     latest_posts_list_raw = Post.objects.filter(poster_id=profile_id)
-    latest_posts_list = create_combined_post(latest_posts_list_raw)
+    latest_quotes_list_raw = Quote.objects.filter(poster_id=profile_id)
+    latest_posts_list = create_combined_post(latest_posts_list_raw )
+    latest_quotes_list = create_combined_post(latest_quotes_list_raw)
+    latest_posts_list += latest_quotes_list
 
     user_profile_stripped = create_combined_profile(request, user_profile, user_cu, len(latest_posts_list))
 
@@ -184,6 +187,22 @@ def view_user_bookmarks(request):
 
 
 @login_required
+def manage_follows(request, profile_id):
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+    profile_to_follow = get_object_or_404(UserProfile, user_id=profile_id)
+
+    # make sure not trying to follow self
+    if requester.id == profile_id:
+        return HttpResponseRedirect(reverse("profile:home", args=(profile_id,)))
+    # if requester already follows, this is unfollow request
+    elif requester.following.contains(profile_to_follow):
+        return delete_follow(request, profile_id=profile_id)
+    else:
+        return create_follow(request, profile_id=profile_id)
+
+
+@login_required
 def create_follow(request, profile_id):
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
@@ -195,7 +214,7 @@ def create_follow(request, profile_id):
     else:
         requester.following.add(profile_to_follow)
         profile_to_follow.followers.add(requester)
-        return HttpResponse()
+        return HttpResponse("Following")
 
 
 @login_required
@@ -210,7 +229,7 @@ def delete_follow(request, profile_id):
     else:
         requester.following.remove(profile_to_follow)
         profile_to_follow.followers.remove(requester)
-        return HttpResponse()
+        return HttpResponse("Follow")
 
 
 @login_required

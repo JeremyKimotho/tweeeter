@@ -2,7 +2,7 @@
 
 {% for post in latest_posts_list %}
 <div class="card-container">
-    <div id="individual-post-div" class="card" onclick="window.location.href='{% url 'posts:display_post' post.post.id post.poster_profile.id %}'">
+    <div id="individual-post-div" class="card" onclick="window.location.href='{% url 'posts:display_post' post.post.id post.poster_profile.id %}';event.stopPropagation();">
         <div class="card-header">
             <div class="container">
                 <div class="row text-center">
@@ -36,6 +36,15 @@
                         <p class="post-body-text">
                             {{ post.post.body }}
                         </p>
+
+                        <!-- Quote post if quote post -->
+                        {% if post.post.quote_post %}
+                        <div class="container">
+                            <div class="row">
+                                {% include 'quote_post_in_post.html' with post=post.post.quote_post %}
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

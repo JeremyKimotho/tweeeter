@@ -16,14 +16,22 @@
             <img class="img-fluid rounded-circle" src="{% static 'images/user1.avif' %}" alt="profile picture"></a>
         </div>
         <div class="col-3"></div> 
-        <div class="col-6" id="profile_buttons">
+        <div class="col-6" id="profile-buttons">
             {% if profile.own_account %}
-                <button hx-get="{% url 'profile:edit_profile' %}" hx-target="#edit-profile">Edit Profile</button>
+                <button hx-get="{% url 'profile:edit_profile' %}" hx-target="#edit-profile">
+                    <h3>
+                        <span>Edit profile</span>
+                    </h3>
+                </button>
             {% else %}
                 {% if profile.is_following %}
-                    <button>Following</button>
+                    <button class="button-fl-fr-text" hx-get="{% url 'profile:follow_user' profile.id %}" hx-target=".fl-unfl-button-text">
+                        <h3 class="fl-unfl-button-text">Following</h3>
+                    </button>
                 {% else %}
-                    <button>Follow</button>
+                    <button class="button-fl-fr-text" hx-get="{% url 'profile:follow_user' profile.id %}" hx-target=".fl-unfl-button-text">
+                        <h3 class="fl-unfl-button-text">Follow</h3>
+                    </button>
                 {% endif %}
             {% endif %}
             {% if profile.is_followed %}

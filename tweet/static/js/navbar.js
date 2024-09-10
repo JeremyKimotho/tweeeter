@@ -6,6 +6,18 @@ htmx.on("htmx:afterSwap", (e) => {
   // Response targeting #dialog => show the modal
   if (e.detail.target.id == "dialog") {
     modal.show()
+
+    const textareas = document.querySelectorAll('.auto-expand');
+
+    console.log("Loading in listeners " + textareas.length)
+
+    textareas.forEach(textarea => {
+      textarea.addEventListener('input', function () {
+        this.style.height = 'auto'; // Reset height
+        this.style.height = `${this.scrollHeight}px`; // Set to scrollHeight
+      });
+    });
+    
     console.log("Show the modal run")
   }
 })

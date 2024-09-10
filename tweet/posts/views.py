@@ -223,5 +223,6 @@ def delete_post(request, post_id):
         return redirect(reverse('homepage:home'))
     else:
         return redirect(reverse('homepage:home')) # homepage
+    
 
 

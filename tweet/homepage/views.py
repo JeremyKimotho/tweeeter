@@ -34,6 +34,38 @@ def time_since_post(post):
     else:
         return None
 
+def create_quote_object(post):
+    profile = get_object_or_404(UserProfile, id=post.poster_id)
+    account = get_object_or_404(CustomUser, id=profile.user_id)
+    
+    # Take only the data we need from post object
+    post_stripped = {
+        "id":post.id,
+        "body":post.body,
+        "pub_date":post.date_posted,
+        "time_since":time_since_post(post)
+    }
+
+    # Take only the data we need from user profile object
+    profile_stripped = {
+        "id":profile.id,
+        "display_name":profile.display_name,
+        "display_picture":profile.display_picture,
+    }
+
+    account_stripped = {
+        "username":account.user_name
+    }
+
+    combined_post = {
+        "post":post_stripped, 
+        "poster_profile":profile_stripped, 
+        "poster_account":account_stripped,
+    }
+
+    return combined_post
+
+
 def create_combined_post(posts):
     users = [get_object_or_404(UserProfile, id=p.poster_id) for p in posts]
     cusers = [get_object_or_404(CustomUser, id=u.user_id) for u in users]
@@ -45,15 +77,25 @@ def create_combined_post(posts):
     combined_posts = []
     
     for post, profile, account, comments_count, reposts_count, likes_count, bookmarks_count in zip(posts, users, cusers,comments, reposts, likes, bookmarks):
+    
+        if isinstance(post, Quote):
+            post_stripped = {
+                "id":post.id,
+                "body":post.body,
+                "pub_date":post.date_posted,
+                "time_since":time_since_post(post),
+                "quote_post":create_quote_object(post.quote_post)
+            }
 
-        # Take only the data we need from post object
-        post_stripped = {
-            "id":post.id,
-            "body":post.body,
-            "pub_date":post.date_posted,
-            "time_since":time_since_post(post)
-        }
-
+            print(post_stripped)
+        else:
+            # Take only the data we need from post object
+            post_stripped = {
+                "id":post.id,
+                "body":post.body,
+                "pub_date":post.date_posted,
+                "time_since":time_since_post(post)
+            }
 
 
         # Take only the data we need from user profile object
