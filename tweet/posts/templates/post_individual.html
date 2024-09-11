@@ -39,10 +39,8 @@
 
                         <!-- Quote post if quote post -->
                         {% if post.post.quote_post %}
-                        <div class="container">
-                            <div class="row">
-                                {% include 'quote_post_in_post.html' with post=post.post.quote_post %}
-                            </div>
+                        <div class="row post-in-post">
+                            {% include 'post_in_post.html' with post=post.post.quote_post %}
                         </div>
                         {% endif %}
                     </div>

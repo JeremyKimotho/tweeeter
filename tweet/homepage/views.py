@@ -12,6 +12,34 @@ from posts.models import Quote
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
+from posts.templates.forms.post_form import NewPostForm
+
+def format_number(num=None):
+    if num is None:
+        num = 55555555
+
+    # If number is less than 1000, return it as it is
+    if num < 1000:
+        return str(num)
+    
+    # If number is in thousands (less than a million)
+    elif num < 1_000_000:
+        # Divide by 1000 and round to one decimal place if necessary
+        formatted = round(num / 1000, 1)
+        # Return without decimal if it's a whole number
+        return f"{int(formatted)}K" if formatted.is_integer() else f"{formatted}K"
+    
+    # If number is in millions (less than a billion)
+    elif num < 1_000_000_000:
+        # Divide by 1,000,000 and round to one decimal place if necessary
+        formatted = round(num / 1_000_000, 1)
+        # Return without decimal if it's a whole number
+        return f"{int(formatted)}M" if formatted.is_integer() else f"{formatted}M"
+    
+    # In case of numbers greater than a billion, you can extend this logic for billions
+    else:
+        return str(num)
+
 def time_since_post(post):
     now = timezone.now()
     time_diff = now - post.date_posted
@@ -34,7 +62,7 @@ def time_since_post(post):
     else:
         return None
 
-def create_quote_object(post):
+def create_post_in_post_object(post):
     profile = get_object_or_404(UserProfile, id=post.poster_id)
     account = get_object_or_404(CustomUser, id=profile.user_id)
     
@@ -65,6 +93,40 @@ def create_quote_object(post):
 
     return combined_post
 
+def create_combined_profile(request, profile, account, posts_count=None):
+    own_account_status = False
+    is_following = False
+    is_followed = False
+
+    if request.user.get_username() == account.get_username():
+        own_account_status = True
+    else:
+        requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+        requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+        if profile.followers.contains(requester):
+            is_following = True
+        if profile.following.contains(requester):
+            is_followed = True    
+
+    user_profile_stripped = {
+        "username": account.user_name,
+        "id": profile.id,
+        "bio": profile.bio,
+        "followers": profile.getFollowers(),
+        "following": profile.getFollowing(),
+        "location": profile.location,
+        "display_picture": profile.display_picture,
+        "display_name": profile.display_name,
+        "background": profile.background_picture,
+        "own_account": own_account_status,
+        "is_following": is_following,
+        "is_followed": is_followed,
+        "dob": account.date_of_birth,
+        "doj": account.date_joined,
+        "posts_count": format_number(posts_count)
+    }
+
+    return user_profile_stripped
 
 def create_combined_post(posts):
     users = [get_object_or_404(UserProfile, id=p.poster_id) for p in posts]
@@ -84,10 +146,9 @@ def create_combined_post(posts):
                 "body":post.body,
                 "pub_date":post.date_posted,
                 "time_since":time_since_post(post),
-                "quote_post":create_quote_object(post.quote_post)
+                "quote_post":create_post_in_post_object(post.quote_post)
             }
 
-            print(post_stripped)
         else:
             # Take only the data we need from post object
             post_stripped = {
@@ -140,10 +201,13 @@ def view_posts(request):
     # latest_posts = [get_object_or_404(Post, id=pt_post.post_id) for pt_post in latest_posts_pt]
 
     latest_posts = Post.objects.all().order_by("-date_posted")[:20]
+    latest_quotes = Quote.objects.all().order_by("-date_posted")[:20]
 
     posts = create_combined_post(latest_posts)
+    quotes = create_combined_post(latest_quotes)
+    posts += quotes
 
-    context = {"latest_posts": posts,}
+    context = {"latest_posts": posts, "new_post_form": NewPostForm(), "homepage": True, "profile": create_combined_profile(request, requester, requester_cu)}
     return render(request, "homepage.html", context)
 
 @login_required

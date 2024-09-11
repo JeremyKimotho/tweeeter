@@ -1,3 +1,34 @@
-{% extends 'list_posts.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %} Home {% endblock %}
+{% block title %}Home{% endblock %}
+
+{% block content_wrapper %}
+    <!-- New Post Form
+    <div class="container homepage_post_form">
+        {% include "new_post_lite.html" with form=new_post_form %}
+    </div> -->
+    <div class="content-wrapper">
+
+        {% if latest_posts %}
+        {% include 'post_individual.html' with latest_posts_list=latest_posts%}
+        {% endif %}
+        <!-- Create Comment Modal -->
+        <div id="comment-modal" class="modal fade">
+            <div id="comment" class="modal-dialog" hx-target="this"></div>
+        </div>
+        
+        <!-- Create Quote Modal -->
+        <div id="quote-modal" class="modal fade">
+            <div id="quote" class="modal-dialog" hx-target="this"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/list_posts.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/list_posts.js' %}"></script>
+{% endblock %}

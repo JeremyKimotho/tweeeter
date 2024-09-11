@@ -5,74 +5,12 @@ from django.urls import reverse
 from urllib.parse import urlparse
 
 from .templates.forms.profile_change_form import ProfileChangeForm
-from homepage.views import create_combined_post
+from homepage.views import create_combined_post, create_combined_profile
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
 from users.models import CustomUser
 from user_profile.models import UserProfile
-
-def format_number(num=None):
-    if num is None:
-        num = 55555555
-
-    # If number is less than 1000, return it as it is
-    if num < 1000:
-        return str(num)
-    
-    # If number is in thousands (less than a million)
-    elif num < 1_000_000:
-        # Divide by 1000 and round to one decimal place if necessary
-        formatted = round(num / 1000, 1)
-        # Return without decimal if it's a whole number
-        return f"{int(formatted)}K" if formatted.is_integer() else f"{formatted}K"
-    
-    # If number is in millions (less than a billion)
-    elif num < 1_000_000_000:
-        # Divide by 1,000,000 and round to one decimal place if necessary
-        formatted = round(num / 1_000_000, 1)
-        # Return without decimal if it's a whole number
-        return f"{int(formatted)}M" if formatted.is_integer() else f"{formatted}M"
-    
-    # In case of numbers greater than a billion, you can extend this logic for billions
-    else:
-        return str(num)
-
-
-def create_combined_profile(request, profile, account, posts_count=None):
-    own_account_status = False
-    is_following = False
-    is_followed = False
-
-    if request.user.get_username() == account.get_username():
-        own_account_status = True
-    else:
-        requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
-        requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
-        if profile.followers.contains(requester):
-            is_following = True
-        if profile.following.contains(requester):
-            is_followed = True    
-
-    user_profile_stripped = {
-        "username": account.user_name,
-        "id": profile.id,
-        "bio": profile.bio,
-        "followers": profile.getFollowers(),
-        "following": profile.getFollowing(),
-        "location": profile.location,
-        "display_picture": profile.display_picture,
-        "display_name": profile.display_name,
-        "background": profile.background_picture,
-        "own_account": own_account_status,
-        "is_following": is_following,
-        "is_followed": is_followed,
-        "dob": account.date_of_birth,
-        "doj": account.date_joined,
-        "posts_count": format_number(posts_count)
-    }
-
-    return user_profile_stripped
 
 @login_required
 def view_profile(request, profile_id):

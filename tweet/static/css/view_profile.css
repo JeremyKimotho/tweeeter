@@ -130,5 +130,18 @@
     border-top:0.5px solid #D3D3D3;
 }
 
+.post-in-post #profile-pic {
+    padding-left: -5%;
+    margin-left: -5%;
+}
 
+.post-in-post .post-body-text {
+    padding-top: 5%;
+    padding-left:2.5%;
+}
+
+.post-in-post .card {
+    border-radius: 15px;
+    border: 0.5px solid #C0C0C0;
+}
 

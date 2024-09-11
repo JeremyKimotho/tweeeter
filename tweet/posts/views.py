@@ -3,13 +3,14 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse 
 
-from homepage.views import create_combined_post
+from homepage.views import create_combined_post, create_post_in_post_object
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
+from .templates.forms.comment_form import NewCommentForm
 from .templates.forms.post_form import NewPostForm
 
 @login_required
@@ -148,7 +149,7 @@ def create_comment(request, post_id):
 
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
-        form = NewPostForm(request.POST)
+        form = NewCommentForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             poster_cu = get_object_or_404(CustomUser, email=request.user.get_username())
@@ -168,10 +169,8 @@ def create_comment(request, post_id):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = NewPostForm()
-        og_post_stripped = {
-            "body":og_post.body,
-        }
+        form = NewCommentForm()
+        og_post_stripped = create_post_in_post_object(og_post)
 
     return render(request, "new_comment.html", {"form": form, "og_post": og_post_stripped,})
 

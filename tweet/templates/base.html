@@ -108,15 +108,34 @@
                     </div>
 
                     <div class="row" id="logout-button-nav">
-                        <button hx-get="{% url 'users:logout' %}">
+                        <form method="POST" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">
                             <h3>Logout</h3>
                         </button>
+                        </form>
                     </div>
 
                     <!-- End of Navigation Bar -->
                 </div>
             </div>
             <div class="col-6 d-flex flex-column justify-content-center align-items-center">
+                {% if homepage %}
+                <div class="container text-center homepage-home-indicator-text">
+                    <nav class="nav nav-pills nav-justified">
+                        <h3 class="nav-link active">
+                            @{{profile.username }}'s tl
+                        
+                            <div class="bottom-border-central"></div>
+                        </h3>
+                    </nav>
+                </div>
+                <!-- New Post Form -->
+                <div class="container homepage_post_form">
+                    {% include "new_post_lite.html" with form=new_post_form %}
+                </div>
+                {% endif %}
+
                 <!-- Main Content Area -->
                 <div class="container">
                     {% block content_wrapper %}

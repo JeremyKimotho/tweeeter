@@ -1,6 +1,8 @@
 const modal = new bootstrap.Modal(document.getElementById("modal"))
+var comment_reply_text_info = document.getElementById("comment-modal-reply-info-div")
 
 console.log("I navbar.js was loaded in and is getting active ! ")
+comment_reply_text_info.style.display = "none";
 
 htmx.on("htmx:afterSwap", (e) => {
   // Response targeting #dialog => show the modal

@@ -1,9 +1,6 @@
 {% load static %}
-<form hx-post="{{ request.path }}" class="modal-content">
+<form hx-post="{% url 'posts:create_post' %}" hx-trigger="click" class="modal-content" id="new-post-form-textarea">
   {% csrf_token %}
-  <div class="modal-header">
-    <button id="modal-post-close" type="button" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
-  </div>
   <div class="modal-body">
     <div class="row">
       <div class="col-2">

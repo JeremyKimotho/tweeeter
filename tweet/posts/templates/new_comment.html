@@ -1,14 +1,25 @@
+{% load static %}
+
 <form hx-post="{{ request.path }}" class="modal-content">
   {% csrf_token %}
   <div class="modal-header">
-    <h5 class="modal-title">New Comment</h5>
+    <button id="modal-post-close" type="button" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
   </div>
-  <div class="modal-body">
-    Commenting on: <p>{{og_post.body}}</p>
-    {{ form.as_p }}
+   <div class="modal-body">
+    <div class="row comment-post-in-post" onclick="event.stopPropagation();">
+      {% include 'post_in_post.html' with post=og_post %}
+    </div>
+    <div class="row">
+      <div class="col-2">
+        <div class="col-7"><img class="img-fluid rounded-circle" src="{% static 'images/user1.avif' %}" alt="profile picture"></div>
+      </div>
+      <div class="col-11 comment-form-body">
+       {{ form.body }}
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
-    <button type="button" data-bs-dismiss="modal">Cancel</button>
-    <button type="submit">Save</button>
+    <span id="character-indicator"></span>
+    <button id="modal-reply-button" type="submit"><h3>Reply</h3></button>
   </div>
 </form>

@@ -135,3 +135,67 @@
 .user-profile-links:hover {
     text-decoration: underline;
 }
+
+.post-in-post #profile-pic {
+    padding-left: -5%;
+    margin-left: -5%;
+}
+
+.post-in-post .post-body-text {
+    padding-top: 5%;
+    padding-left:2.5%;
+}
+
+.post-in-post .card {
+    border-radius: 15px;
+    border: 0.5px solid #C0C0C0;
+}
+
+.comment-post-in-post  #profile-pic {
+    padding-left: -5%;
+    margin-left: -5%;
+}
+
+.comment-post-in-post .post-body-text {
+    padding-top: 1%;
+    padding-left:12%;
+}
+
+.comment-post-in-post .card {
+    margin-top:-2.5%;
+    border-radius: 15px;
+    border: none;
+}
+
+#comment-modal-reply-info-div #reply-username-text{
+    color:grey;
+}
+
+#comment-modal-reply-info-div a{
+    text-decoration:none;
+}
+
+#comment-modal .modal-header {
+    border:none;
+}
+
+#comment-modal .comment-form-body {
+    margin-left:-9%;
+}
+
+#comment-modal #modal-reply-button {
+  background-color: green;
+  color:white;
+  border:none;
+  border-radius: 50px;
+}
+
+#comment-modal .modal-footer h3 {
+  font-size: 20px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-top: 7%;
+}
+
+
+
