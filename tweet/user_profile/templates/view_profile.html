@@ -55,9 +55,9 @@
         </p>
         
         <p>
-            <span class="profile-fl-fr-numbers">{{ profile.following }}</span><span class="profile-fl-fr-text"> Following</span>
+            <a class="profile-view-following-link" href="{% url 'profile:following' profile.id %}"><span class="profile-fl-fr-numbers">{{ profile.following }}</span><span class="profile-fl-fr-text"> Following</span></a>
             <span class="profile-fl-fr-blank"></span>
-            <span class="profile-fl-fr-numbers">{{ profile.followers }}</span><span class="profile-fl-fr-text"> Followers</span>
+            <a class="profile-view-following-link" href="{% url 'profile:followers' profile.id %}"><span class="profile-fl-fr-numbers">{{ profile.followers }}</span><span class="profile-fl-fr-text"> Followers</span></a>
         </p>
     </div>
 </div>

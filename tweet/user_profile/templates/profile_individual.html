@@ -1,0 +1,38 @@
+{% load static %}
+
+{% for follower in latest_friends_list %}
+<div class="card-container">
+    <div class="card" onclick="window.location.href='{% url 'profile:view_profile' follower.id %}';event.stopPropagation();">
+        <div class="card-body">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-2" id="profile-pic">
+                        <div class="col-2"></div>
+                        <div class="col-8">
+                            <img class="img-fluid rounded-circle" src="{% static 'images/user1.avif' %}" alt="profile picture">
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="col-8 text-start profile-info-text">
+                        <span class="profile-ldj">{{ follower.display_name }}</span>
+                        <p class="profile-ldj-light">@{{ follower.username }}</p>
+                    </div>
+                    <div class="col-2 text-end" id="post-buttons">
+                        <button>Follow</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-10 text-start profile-info-text">
+                        <span class="post-body-text">
+                            {{ follower.bio }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+{% endfor %}
+

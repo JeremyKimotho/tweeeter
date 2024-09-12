@@ -73,7 +73,7 @@
 .back-button-div {
     background-color: white;
     border: 0.5px solid light grey;
-    height: 13%;
+    max-height:15%;
 }
 
 .back-button-div button {
@@ -143,5 +143,54 @@
 .post-in-post .card {
     border-radius: 15px;
     border: 0.5px solid #C0C0C0;
+}
+
+.profile-view-following-link {
+    text-decoration: none;
+}
+
+.profile-view-following-link:hover .profile-fl-fr-numbers,.profile-view-following-link:hover .profile-fl-fr-text{
+    color:green;
+}
+
+.view-friends-content .back-button-div {
+    background-color: white;
+}
+
+.view-friends-content .nav {
+    border:0.5px solid #D3D3D3;
+    border-top:none;
+}
+
+.view-friends-content #back-and-nav-div {
+    border:0.5px solid #D3D3D3;
+    border-bottom:none;
+}
+
+.view-friends-content #friends-div .card {
+    border:none;
+}
+
+.view-friends-content #friends-div .card-body {
+    margin-top:1%;
+}
+
+.view-friends-content #friends-div:hover {
+    background-color: whitesmoke;
+    cursor:pointer;
+}
+
+.view-friends-content #friends-div {
+    border: 0.5px solid #D3D3D3;
+}
+
+.view-friends-content #friends-div button {
+    border: 1px solid #DCDCDC;
+    border-radius: 50px;
+    background-color:black;
+    color: white;
+    padding: 2%;
+    padding-left: 9%;
+    padding-right: 9%;
 }
 

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ profile_data.display_name }}'s Following {% endblock %}
+
+{% block content_wrapper %}
+<div class="container view-friends-content">
+    <div class="row" id="back-and-nav-div">
+        <div class="container">
+            <div class="row back-button-div">
+                <div class="col-1">
+                    <button onclick="window.location.href='{% url 'profile:back' %}'"><i class="fa-solid fa-arrow-left-long fa-xl"></i></button>
+                </div>
+                <div class="col-11">
+                    <span class="profile-displayname-text">{{ profile_data.display_name }}</span>
+                    <p class="profile-fl-fr-text">@{{ profile_data.username }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row nav-div">
+        <nav class="nav nav-pills nav-justified">
+            <a class="nav-link" href="{% url 'profile:followers' profile_data.id %}">
+                Followers
+            
+                <div class="bottom-border-central"></div>
+            </a>
+            <a class="nav-link active" href="">
+                Following
+                <div class="bottom-border-central"></div>
+            </a>
+        </nav>
+    </div>
+    <div class="row" id="friends-div">
+        <div class="content-wrapper">
+            {% if latest_following_list %}
+                {% include 'profile_individual.html' with latest_friends_list=latest_following_list %}
+            {% else %}
+                <p class="text-center">Nothing here...</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/list_posts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/view_profile.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/list_posts.js' %}"></script>
+    <script src="{% static 'js/view_profile.js' %}"></script>
+{% endblock %}

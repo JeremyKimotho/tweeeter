@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse 
 
-from homepage.views import create_combined_post, create_post_in_post_object
+from homepage.views import create_combined_posts, create_post_in_post_object
 from posts.models import Comment
 from posts.models import Post
 from posts.models import Quote    
@@ -22,9 +22,9 @@ def display_post(request, post_id, post_op_id):
     latest_comments_op = latest_comments_raw.filter(poster_id=post_op_id)
     latest_comments_all = latest_comments_raw.exclude(poster_id=post_op_id)
 
-    og_post_info = create_combined_post([post])
-    op_post_comments = create_combined_post(latest_comments_op)
-    latest_comments = create_combined_post(latest_comments_all)
+    og_post_info = create_combined_posts([post])
+    op_post_comments = create_combined_posts(latest_comments_op)
+    latest_comments = create_combined_posts(latest_comments_all)
 
     context = {'og_post':og_post_info, 'op_comments':op_post_comments, 'latest_comments_list':latest_comments}
 

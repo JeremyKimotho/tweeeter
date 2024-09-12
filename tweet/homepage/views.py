@@ -128,7 +128,40 @@ def create_combined_profile(request, profile, account, posts_count=None):
 
     return user_profile_stripped
 
-def create_combined_post(posts):
+def create_combined_profiles(request, profiles):
+
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+
+    combined_profiles = []
+
+    for profile in profiles:
+        is_following = False
+        is_followed = False
+
+        account = get_object_or_404(CustomUser, id=profile.user_id)
+
+        if profile.followers.contains(requester):
+            is_following = True
+        if profile.following.contains(requester):
+            is_followed = True    
+
+        user_profile_stripped = {
+            "username": account.user_name,
+            "id": profile.id,
+            "bio": profile.bio,
+            "display_picture": profile.display_picture,
+            "display_name": profile.display_name,
+            "is_following": is_following,
+            "is_followed": is_followed,
+        }
+
+        combined_profiles.append(user_profile_stripped)
+
+    return combined_profiles
+
+
+def create_combined_posts(posts):
     users = [get_object_or_404(UserProfile, id=p.poster_id) for p in posts]
     cusers = [get_object_or_404(CustomUser, id=u.user_id) for u in users]
     comments = [(p.getComments()) for p in posts] 
@@ -203,8 +236,8 @@ def view_posts(request):
     latest_posts = Post.objects.all().order_by("-date_posted")[:20]
     latest_quotes = Quote.objects.all().order_by("-date_posted")[:20]
 
-    posts = create_combined_post(latest_posts)
-    quotes = create_combined_post(latest_quotes)
+    posts = create_combined_posts(latest_posts)
+    quotes = create_combined_posts(latest_quotes)
     posts += quotes
 
     context = {"latest_posts": posts, "new_post_form": NewPostForm(), "homepage": True, "profile": create_combined_profile(request, requester, requester_cu)}
