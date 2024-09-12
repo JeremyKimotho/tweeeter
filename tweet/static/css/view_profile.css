@@ -194,3 +194,9 @@
     padding-right: 9%;
 }
 
+.comment-post-in-post .card {
+    margin-top:-2.5%;
+    border-radius: 15px;
+    border: none;
+}
+

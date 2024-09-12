@@ -1,12 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse 
 
-from homepage.views import create_combined_posts, create_post_in_post_object
-from posts.models import Comment
-from posts.models import Post
-from posts.models import Quote    
+from homepage.views import create_combined_posts, create_post_in_post_object, create_quote_post_in_modal_object
+from posts.models import BasePost, Comment, Post, Quote    
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
@@ -15,7 +13,7 @@ from .templates.forms.post_form import NewPostForm
 
 @login_required
 def display_post(request, post_id, post_op_id):
-    post = get_object_or_404(Post, id=post_id)
+    post = get_object_or_404(BasePost, id=post_id)
     
     # get comments, filter out op comments from others
     latest_comments_raw = post.comments.all()
@@ -32,7 +30,7 @@ def display_post(request, post_id, post_op_id):
 
 @login_required
 def create_like(request, post_id):
-    og_post = get_object_or_404(Post, id=post_id)
+    og_post = get_object_or_404(BasePost, id=post_id)
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
 
@@ -45,7 +43,7 @@ def create_like(request, post_id):
 
 @login_required
 def delete_like(request, post_id):
-    og_post = get_object_or_404(Post, id=post_id)
+    og_post = get_object_or_404(BasePost, id=post_id)
     post_liker_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     post_liker = get_object_or_404(UserProfile, user_id=post_liker_cu.id)
     og_post.likes.remove(post_liker)
@@ -53,7 +51,7 @@ def delete_like(request, post_id):
 
 @login_required
 def create_repost(request, post_id):
-    og_post = get_object_or_404(Post, id=post_id)
+    og_post = get_object_or_404(BasePost, id=post_id)
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
 
@@ -66,7 +64,7 @@ def create_repost(request, post_id):
 
 @login_required
 def delete_repost(request, post_id):
-    og_post = get_object_or_404(Post, id=post_id)
+    og_post = get_object_or_404(BasePost, id=post_id)
     post_reposter_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     post_reposter = get_object_or_404(UserProfile, user_id=post_reposter_cu.id)
     og_post.reposts.remove(post_reposter)
@@ -74,7 +72,7 @@ def delete_repost(request, post_id):
 
 @login_required
 def create_bookmark(request, post_id):
-    og_post = get_object_or_404(Post, id=post_id)
+    og_post = get_object_or_404(BasePost, id=post_id)
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
 
@@ -87,7 +85,7 @@ def create_bookmark(request, post_id):
 
 @login_required
 def delete_bookmark(request, post_id):
-    og_post = get_object_or_404(Post, id=post_id)
+    og_post = get_object_or_404(BasePost, id=post_id)
     post_bookmarker_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     post_bookmarker = get_object_or_404(UserProfile, user_id=post_bookmarker_cu.id)
     og_post.bookmarks.remove(post_bookmarker) 
@@ -95,12 +93,12 @@ def delete_bookmark(request, post_id):
 
 @login_required
 def get_comments_count(request, post_id):
-    og_post = get_object_or_404(Post, id=post_id)
+    og_post = get_object_or_404(BasePost, id=post_id)
     return HttpResponse(status=200, content=og_post.getComments())
 
 @login_required
 def create_quote(request, post_id):
-    og_post = get_object_or_404(Post, id=post_id)
+    og_post = get_object_or_404(BasePost, id=post_id)
 
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
@@ -145,7 +143,16 @@ def delete_quote(request, post_id):
 
 @login_required
 def create_comment(request, post_id):
-    og_post = get_object_or_404(Post, id=post_id)
+    og_post = Post.objects.filter(id=post_id)
+    if not og_post:
+        og_post = Quote.objects.filter(id=post_id)
+        if not og_post:
+            og_post = Comment.objects.filter(id=post_id)
+            if not og_post:
+                raise Http404("Comment object does not exist")
+            
+    og_post = og_post.first()
+    print("Object type", type(og_post))
 
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
@@ -170,7 +177,7 @@ def create_comment(request, post_id):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = NewCommentForm()
-        og_post_stripped = create_post_in_post_object(og_post)
+        og_post_stripped = create_quote_post_in_modal_object(og_post)
 
     return render(request, "new_comment.html", {"form": form, "og_post": og_post_stripped,})
 
@@ -213,13 +220,16 @@ def create_post(request):
 
 @login_required
 def delete_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    post = get_object_or_404(BasePost, id=post_id)
     og_poster_up = get_object_or_404(UserProfile, id=post.poster_id)
     og_poster = get_object_or_404(CustomUser, id=og_poster_up.user_id)
 
     if request.user.get_username() == og_poster.get_username():   
-        post.delete()
-        return redirect(reverse('homepage:home'))
+        if request.method == "POST":
+            post.delete()
+            return HttpResponse(status=204)
+
+        return render(request, "delete_post.html")
     else:
         return redirect(reverse('homepage:home')) # homepage
     

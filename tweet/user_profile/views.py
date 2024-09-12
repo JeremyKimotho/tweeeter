@@ -6,9 +6,7 @@ from urllib.parse import urlparse
 
 from .templates.forms.profile_change_form import ProfileChangeForm
 from homepage.views import create_combined_posts, create_combined_profile, create_combined_profiles
-from posts.models import Comment
-from posts.models import Post
-from posts.models import Quote    
+from posts.models import BasePost, Comment, Post, Quote   
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
@@ -54,10 +52,14 @@ def view_user_posts(request, profile_id):
     user_profile  = get_object_or_404(UserProfile, id=profile_id)
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+
+
     latest_posts_list_raw = Post.objects.filter(poster_id=profile_id)
     latest_quotes_list_raw = Quote.objects.filter(poster_id=profile_id)
-    latest_posts_list = create_combined_posts(latest_posts_list_raw )
-    latest_quotes_list = create_combined_posts(latest_quotes_list_raw)
+    latest_posts_list = create_combined_posts(latest_posts_list_raw, requester)
+    latest_quotes_list = create_combined_posts(latest_quotes_list_raw, requester)
     latest_posts_list += latest_quotes_list
 
     user_profile_stripped = create_combined_profile(request, user_profile, user_cu, len(latest_posts_list))
@@ -78,8 +80,11 @@ def view_user_comments(request, profile_id):
     user_profile  = get_object_or_404(UserProfile, id=profile_id)
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+
     latest_comments_list_raw = Comment.objects.filter(poster_id=profile_id)
-    latest_comments_list = create_combined_posts(latest_comments_list_raw)
+    latest_comments_list = create_combined_posts(latest_comments_list_raw, requester)
 
     user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
 
@@ -99,12 +104,15 @@ def view_user_likes(request, profile_id):
     user_profile  = get_object_or_404(UserProfile, id=profile_id)
     user_cu = get_object_or_404(CustomUser, id=user_profile.user_id)
 
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+
     user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
 
     latest_likes_list_raw_p = Post.objects.filter(likes__id=profile_id)
     latest_likes_list_raw_q = Quote.objects.filter(likes__id=profile_id)
     latest_likes_list_raw_c = Comment.objects.filter(likes__id=profile_id)
-    latest_likes_list = create_combined_posts(latest_likes_list_raw_p) + create_combined_posts(latest_likes_list_raw_q) + create_combined_posts(latest_likes_list_raw_c)
+    latest_likes_list = create_combined_posts(latest_likes_list_raw_p, requester) + create_combined_posts(latest_likes_list_raw_q, requester) + create_combined_posts(latest_likes_list_raw_c, requester)
 
     context = {"latest_posts": latest_likes_list, "profile_data": user_profile_stripped,}
     return render(request, "likes.html", context)
@@ -128,7 +136,10 @@ def view_user_bookmarks(request):
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
 
     latest_posts_raw = Post.objects.filter(bookmarks__id=requester.id)
-    latest_posts = create_combined_posts(latest_posts_raw)
+    latest_quotes_raw = Quote.objects.filter(bookmarks__id=requester.id)
+    latest_posts = create_combined_posts(latest_posts_raw, requester)
+    latest_quotes = create_combined_posts(latest_quotes_raw, requester)
+    latest_posts += latest_quotes
 
     context = {"latest_posts": latest_posts, "username": requester_cu.user_name}
     return render(request, "bookmarks.html", context)

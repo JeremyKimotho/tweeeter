@@ -12,7 +12,7 @@ from posts.models import Quote
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
-from posts.templates.forms.post_form import NewPostForm
+from posts.templates.forms.post_form_lite import NewPostFormLite
 
 def format_number(num=None):
     if num is None:
@@ -73,6 +73,51 @@ def create_post_in_post_object(post):
         "pub_date":post.date_posted,
         "time_since":time_since_post(post)
     }
+
+    # Take only the data we need from user profile object
+    profile_stripped = {
+        "id":profile.id,
+        "display_name":profile.display_name,
+        "display_picture":profile.display_picture,
+    }
+
+    account_stripped = {
+        "username":account.user_name
+    }
+
+    combined_post = {
+        "post":post_stripped, 
+        "poster_profile":profile_stripped, 
+        "poster_account":account_stripped,
+    }
+
+    return combined_post
+
+def create_quote_post_in_modal_object(post):
+    profile = get_object_or_404(UserProfile, id=post.poster_id)
+    account = get_object_or_404(CustomUser, id=profile.user_id)
+    
+    if isinstance(post, Quote):
+        post_stripped = {
+            "id":post.id,
+            "body":post.body,
+            "pub_date":post.date_posted,
+            "time_since":time_since_post(post),
+            "quote_post":create_post_in_post_object(post.quote_post)
+        }
+
+        print(post_stripped)
+
+    else:
+        # Take only the data we need from post object
+        post_stripped = {
+            "id":post.id,
+            "body":post.body,
+            "pub_date":post.date_posted,
+            "time_since":time_since_post(post)
+        }
+
+        print(post_stripped)
 
     # Take only the data we need from user profile object
     profile_stripped = {
@@ -161,7 +206,7 @@ def create_combined_profiles(request, profiles):
     return combined_profiles
 
 
-def create_combined_posts(posts):
+def create_combined_posts(posts, requester_profile):
     users = [get_object_or_404(UserProfile, id=p.poster_id) for p in posts]
     cusers = [get_object_or_404(CustomUser, id=u.user_id) for u in users]
     comments = [(p.getComments()) for p in posts] 
@@ -191,6 +236,8 @@ def create_combined_posts(posts):
                 "time_since":time_since_post(post)
             }
 
+        if post.poster_id == requester_profile.id:
+            post_stripped["own_post"] = "Yes"
 
         # Take only the data we need from user profile object
         profile_stripped = {
@@ -233,14 +280,14 @@ def view_posts(request):
 
     # latest_posts = [get_object_or_404(Post, id=pt_post.post_id) for pt_post in latest_posts_pt]
 
-    latest_posts = Post.objects.all().order_by("-date_posted")[:20]
+    latest_posts = Post.objects.all().order_by("-date_posted")[:2]
     latest_quotes = Quote.objects.all().order_by("-date_posted")[:20]
 
-    posts = create_combined_posts(latest_posts)
-    quotes = create_combined_posts(latest_quotes)
+    posts = create_combined_posts(latest_posts, requester)
+    quotes = create_combined_posts(latest_quotes, requester)
     posts += quotes
 
-    context = {"latest_posts": posts, "new_post_form": NewPostForm(), "homepage": True, "profile": create_combined_profile(request, requester, requester_cu)}
+    context = {"latest_posts": posts, "new_post_form": NewPostFormLite(), "homepage": True, "profile": create_combined_profile(request, requester, requester_cu)}
     return render(request, "homepage.html", context)
 
 @login_required

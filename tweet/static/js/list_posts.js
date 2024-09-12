@@ -1,19 +1,17 @@
 const comment_modal = new bootstrap.Modal(document.getElementById("comment-modal"));
 const quote_modal = new bootstrap.Modal(document.getElementById("quote-modal"));
-const comment_reply_text_info = document.getElementById("comment-modal-reply-info-div")
-const post_form_homepage = document.getElementById("new-post-form-textarea")
+const post_form_homepage = document.getElementById("new-post-form-textarea");
+const delete_post_modal = new bootstrap.Modal(document.getElementById("delete-post-modal"));
+const block_user_modal = new bootstrap.Modal(document.getElementById("block-user-modal"))
 
 console.log("I homepage.js was loaded in and is getting active ! ")
 
 htmx.on("htmx:afterSwap", (e) => {
   // Response targeting #comment => show the modal
   if (e.detail.target.id == "comment") {
-    comment_reply_text_info.style.display = "none"; // show the text relating to post info when commenting
     comment_modal.show()
 
     const textareas = document.querySelectorAll('.auto-expand');
-
-    console.log("Loading in listeners " + textareas.length)
 
     textareas.forEach(textarea => {
       textarea.addEventListener('input', function () {
@@ -24,18 +22,29 @@ htmx.on("htmx:afterSwap", (e) => {
     
   } else if (e.detail.target.id == "quote") {
     quote_modal.show()
+  } 
+  else if (e.detail.target.id == "block-user") {
+    block_user_modal.show();
+  } else if (e.detail.target.id == "delete-post") {
+    delete_post_modal.show();
   }
 })
 
 htmx.on("htmx:beforeSwap", (e) => {
   // Empty response targeting #comment => hide the modal
   if (e.detail.target.id == "comment" && !e.detail.xhr.response) {
-    comment_reply_text_info.style.display = "block"; // show the text relating to post info when commenting
-    comment_modal.hide()
-    e.detail.shouldSwap = false
+    comment_modal.hide();
+    e.detail.shouldSwap = false;
   } else if (e.detail.target.id == "quote" && !e.detail.xhr.response) {
-    quote_modal.hide()
-    e.detail.shouldSwap = false
+    quote_modal.hide();
+    e.detail.shouldSwap = false;
+  } 
+  else if (e.detail.target.id == "block-user" && !e.detail.xhr.response) {
+    block_user_modal.hide();
+    e.detail.shouldSwap = false;
+  } else if (e.detail.target.id == "delete-post" && !e.detail.xhr.response) {
+    delete_post_modal.hide();
+    e.detail.shouldSwap = false;
   }
 })
 
@@ -48,7 +57,6 @@ htmx.on("htmx:afterRequest", (e) => {
   if (e.target.id == "new-post-form-textarea") {
     post_form_homepage.reset()
   }
-  console.log("Something happened");
 })
 
 document.body.addEventListener('htmx:afterRequest', function(event) {
@@ -57,53 +65,17 @@ document.body.addEventListener('htmx:afterRequest', function(event) {
       // Reset the form after submission
       post_form_homepage.reset();
     }
-  });
+  }, true);       
 
-
-let like_toggle = true;
-let bookmark_toggle = true;
-let repost_toggle = false;
-var isDropdownVisible = false;
-
-$('#comment_button').click(function() {
-    var commentUrl = $(this).data('url');
-    var postID = $(this).data('id');
-    $.ajax({
-        url: commentUrl,
-        method: 'GET',
-        success: function(response) {
-            $('#post-comments-{{ postID }}').text(response.content);
-        },
-        error: function(xhr, status, error) {
-            console.log("An error occurred: " + error);
-        }
-    });
-});
-
-$('#repost_button').click(function() {
-    if (repost_toggle) {
-        var repostUrl = $(this).data('t-url');
-        var repostText = "Unrepost";
-    } else {
-        var repostUrl = $(this).data('f-url');
-        var repostText = "Repost";
+document.addEventListener('click', function (event) {
+  var dropdowns = document.querySelectorAll('.dropdown-menu');
+  dropdowns.forEach(function (dropdown) {
+    // Check if click is outside the dropdown and its button
+    if (!dropdown.contains(event.target) && !dropdown.previousElementSibling.contains(event.target)) {
+      dropdown.classList.remove('show');
     }
-    repost_toggle = !repost_toggle;  // Switch the toggle flag
+  });
+}, true);
 
-    $.ajax({
-        url: repostUrl,
-        method: 'GET',
-        success: function(response) {
-            $("#post-repost-dd").text(repostText)
-            $('#post-reposts').text(response.total);
-        },
-        error: function(xhr, status, error) {
-            console.log("An error occurred: " + error);
-        }
-    });
-
-    hideDropdown();
-    isDropdownVisible = false;
-}); 
 
 

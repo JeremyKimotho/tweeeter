@@ -4,10 +4,6 @@
 {% block title %}Home{% endblock %}
 
 {% block content_wrapper %}
-    <!-- New Post Form
-    <div class="container homepage_post_form">
-        {% include "new_post_lite.html" with form=new_post_form %}
-    </div> -->
     <div class="content-wrapper">
 
         {% if latest_posts %}
@@ -21,6 +17,16 @@
         <!-- Create Quote Modal -->
         <div id="quote-modal" class="modal fade">
             <div id="quote" class="modal-dialog" hx-target="this"></div>
+        </div>
+
+        <!-- Block User Modal -->
+        <div id="block-user-modal" class="modal fade overtop-overlay-content">
+            <div id="block-user" class="modal-dialog" hx-target="this"></div>
+        </div>
+
+        <!-- Delete Post Modal -->
+        <div id="delete-post-modal" class="modal fade overtop-overlay-content">
+            <div id="delete-post" class="modal-dialog" hx-target="this"></div>
         </div>
     </div>
 {% endblock %}

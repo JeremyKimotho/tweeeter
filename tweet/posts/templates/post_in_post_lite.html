@@ -7,8 +7,6 @@
                 <div class="col-2" id="profile-pic">
                     <div class="col-8">
                         <a href="{% url 'profile:view_profile' post.poster_profile.id %}" onclick="event.stopPropagation();" class="user-profile-links"><img class="img-fluid rounded-circle" src="{% static 'images/user1.avif' %}" alt="profile picture"></a>
-                        
-                        <!-- <div class="col-1" id="reply-icon">.</div> -->
                     </div>
                 </div>
                 <div class="col-8 text-start profile-info-text">
@@ -34,16 +32,6 @@
                     </p>
                     <!-- Will need to truncate chars when an image is included in post_in_post -->
 
-                    <!-- Quote post if quote post -->
-                    {% if post.post.quote_post %}
-                    <div class="row post-in-post">
-                        {% include 'post_in_post_lite.html' with post=post.post.quote_post %}
-                    </div>
-                    {% endif %}
-
-                    <p class="post-body-text" id="comment-modal-reply-info-div">
-                        <span id="reply-username-text">Replying to <a href="{% url 'profile:view_profile' post.poster_profile.id %}">@{{ post.poster_account.username }}</a></span>
-                    </p>
                 </div>
             </div>
         </div>

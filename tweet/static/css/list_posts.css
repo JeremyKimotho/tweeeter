@@ -60,28 +60,28 @@
 
 .fa-heart:hover {
     color: #e74c3c; /* Red color */
-    box-shadow: 0 0 30px rgba(231, 76, 60, 0.7); /* Red glow */
+    text-shadow: 0 0 18px rgba(231, 76, 60, 10); /* Red glow */
     transform: scale(1.1); /* Optional: Slightly increase size on hover */
     background-color: whitesmoke;
 }
 
 .fa-comment:hover {
     color: #3498db; /* Light blue color */
-    box-shadow: 0 0 30px rgba(52, 152, 219, 0.7); /* Light blue glow */
+    text-shadow: 0 0 18px rgba(52, 152, 219, 10); /* Light blue glow */
     transform: scale(1.1); /* Optional: Slightly increase size on hover */
     background-color: whitesmoke;
 }
 
 .fa-bookmark:hover {
     color: #f1c40f; /* Gold color */
-    box-shadow: 0 0 30px rgba(241, 196, 15, 0.7); /* Gold glow */
+    text-shadow: 0 0 18px rgba(241, 196, 15, 0.5); /* Gold glow */
     transform: scale(1.1);
     background-color: whitesmoke;
 }
 
 .fa-retweet:hover {
     color: #2ecc71; /* Muted green color */
-    box-shadow: 0 0 30px rgba(46, 204, 113, 0.7); /* Muted green glow */
+    text-shadow: 0 0 16px rgba(46, 204, 113, 0.7); /* Muted green glow */
     transform: scale(1.1);
     background-color: whitesmoke;
 }
@@ -101,6 +101,10 @@
 .content-wrapper button {
     border:none;
     background-color: white;
+}
+
+.card-container button {
+    transition: background-color 0s ease;
 }
 
 .card-container:hover .card{
@@ -196,6 +200,58 @@
   padding-right:5px;
   padding-top: 7%;
 }
+
+#individual-post-div .card-footer .dropdown-menu {
+    padding:0;
+}
+
+#individual-post-div .card-footer .dropdown-menu:hover .dropdown-item {
+    color:green;
+    background-color: inherit;
+}
+
+#comment-modal #profile-pic #reply-icon {
+    color:red;
+    background-color: red;
+    margin-left:48%;
+    padding-top: 10%;
+    margin-top:10%;
+}
+
+#comment-modal .post-in-post {
+    /* border:solid black;
+    margin-left: 5%;
+    margin-top:5%; */
+
+}
+
+#individual-post-div #post-buttons .dropdown-toggle::after {
+  content: none; /* Remove the default arrow (caret) */
+}
+
+#individual-post-div .card-header .dropdown-menu {
+    padding:1%;
+    max-width: auto;
+    height:auto;
+    top:1%;
+    bottom:auto;
+    left:auto;
+    right:2%;
+    pointer-events: auto;
+}
+
+#individual-post-div .card-header .dropdown-menu .dropdown-item {
+    color:black;
+}
+
+#individual-post-div .card-header .dropdown-menu #delete-text,  #individual-post-div .card-header .dropdown-menu #block-text{
+    color: red
+}
+
+/* #individual-post-div .card-header .dropdown-menu:hover .dropdown-item {
+    color:red;
+    background-color: inherit;
+} */
 
 
 
