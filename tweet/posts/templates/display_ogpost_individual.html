@@ -1,0 +1,144 @@
+{% load static %}
+
+{% for post in og_p %}
+<div id="individual-post-div" class="card individual-post-div og-post">
+    <div class="card-header">
+        <div class="container">
+            <div class="row back-button-div">
+                <div class="col-1">
+                    <button onclick="window.location.href='{% url 'profile:back' %}'"><i class="fa-solid fa-arrow-left-long fa-xl"></i></button>
+                </div>
+                <div class="col-11">
+                    <span class="post-displayname-text">Post</span>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-2" id="profile-pic">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <img class="img-fluid rounded-circle" src="{% static 'images/user1.avif' %}" alt="profile picture">
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <div class="col-8 text-start profile-info-text">
+                    <span class="profile-ldj">{{ post.poster_profile.display_name }}</span>
+                    <p class="profile-ldj-light">@{{ post.poster_account.username }}</p>
+                </div>
+                <div class="col-2" id="post-buttons">
+                    <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" onclick="event.stopPropagation();" id="drpdwn-{{ post.post.body | truncatechars:7 }}">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </button>
+                    <ul class="dropdown-menu overtop-overlay-content">
+                        <!-- Dropdown menu links -->
+                        {% if post.post.own_post %}
+                        <li>
+                            <a class="dropdown-item" id="delete-text" hx-get="{% url 'posts:unpost' post.post.id %}" hx-target="#delete-post" onclick="event.stopPropagation();">
+                            <i class="fa-solid fa-trash-can"></i>  Delete Post
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item pin-text" id="pin-text-{{post.post.id}}" hx-get="{% url 'posts:pin_post' post.post.id %}" onclick="event.stopPropagation();">
+                                <i class="fa-solid fa-thumbtack"></i> Pin to profile
+                            </a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a class="dropdown-item" id="block-text" hx-get="{% url 'profile:block' post.poster_profile.id %}" hx-target="#block-user" onclick="event.stopPropagation();">
+                                <i class="fa-solid fa-ban"></i> Block @{{ post.poster_account.username }}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" id="mute-text" hx-get="{% url 'profile:mute' post.poster_profile.id %}" hx-target="#block-user" onclick="event.stopPropagation();">
+                                <i class="fa-solid fa-volume-xmark"></i> Mute @{{ post.poster_account.username }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-11 text-start profile-info-text">
+                    <p class="post-body-text">
+                        {{ post.post.body }}
+                    </p>
+
+                    <!-- Quote post if quote post -->
+                    {% if post.post.quote_post %}
+                    <div class="row post-in-post">
+                        {% include 'post_in_post_lite.html' with post=post.post.quote_post %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-11 text-start profile-info-text">
+                    <span class="profile-ldj-light">{{ post.post.pub_date|date:"g:i A · M d, Y" }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-body-secondary">
+        <div class="container">
+            <div class="row text-center">
+                <!-- First Button + Counter -->
+                <div class="col-3 d-flex justify-content-center align-items-center">
+                    <button id="comment_button" data-id="post.post.id" data-url="{% url 'posts:get_comments_count' post.post.id %}" hx-get="{% url 'posts:comment' post.post.id %}" hx-target="#comment" onclick="event.stopPropagation();">
+                        <!-- Comment Icon-->
+                        <i class="fa-regular fa-comment default-icon"></i>
+                    </button>
+                    <span class="ms-2" id="post-comments-{{ post.post.id }}">{{ post.comments_count }}</span> <!-- Counter or any text -->
+                </div>
+
+                <!-- Second Button + Counter -->
+                <div class="col-3 d-flex justify-content-center align-items-center">
+                    <div class="btn-group dropup">
+                        <button hx-get="{% url 'posts:repost' post.post.id %}" hx-target="#post-reposts-{{ post.post.id }}" onclick="event.stopPropagation();">
+                            <!-- Repost Icon: Unreposted State -->
+                            <i class="fa-solid fa-retweet default-icon"></i>
+                            <!-- Repost Icon: Reposted State -->
+                            <!-- <i class="fa-solid fa-retweet reposted-icon-change"></i>  -->
+                        </button>
+                        <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- Dropdown menu links -->
+                            <li><a class="dropdown-item" hx-get="{% url 'posts:quote' post.post.id %}" hx-target="#quote" href="#">Quote</a></li>
+                        </ul>
+                    </div>
+                    <span class="ms-2" id="post-reposts-{{ post.post.id }}">{{ post.reposts_count }}</span>
+                </div>
+
+                <!-- Third Button + Counter -->
+                <div class="col-3 d-flex justify-content-center align-items-center">
+                    <button hx-get="{% url 'posts:like' post.post.id %}" hx-target="#post-likes-{{ post.post.id }}" onclick="event.stopPropagation();">
+                        <!-- Like Icon: Unliked State -->
+                        <i class="fa-regular fa-heart default-icon"></i>
+                        <!-- Like Icon: Liked State -->
+                        <!-- <i class="fa-solid fa-heart liked-icon-change"></i>  -->
+                    </button>
+                    <span class="ms-2" id="post-likes-{{ post.post.id }}">{{ post.likes_count }}</span> <!-- Counter or any text -->
+                </div>
+
+                <!-- Fourth Button + Counter -->
+                <div class="col-3 d-flex justify-content-center align-items-center">
+                <button hx-get="{% url 'posts:bookmark' post.post.id %}" hx-target="#post-bookmarks-{{ post.post.id }}" onclick="event.stopPropagation();">
+                    <!-- Bookmark Icon: Unbookmark State -->
+                    <i class="fa-regular fa-bookmark default-icon"></i>
+                    <!-- Bookmark Icon: Bookmarked State -->
+                    <!-- <i class="fa-solid fa-bookmark bookmarked-icon-change"></i>  -->
+                </button>
+                <span class="ms-2" id="post-bookmarks-{{ post.post.id }}">{{ post.bookmarks_count }}</span> <!-- Counter or any text -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+

@@ -8,23 +8,33 @@ from posts.models import BasePost, Comment, Post, Quote
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
-from .templates.forms.comment_form import NewCommentForm
+from .templates.forms.comment_form import NewCommentForm, NewCommentFormLite
 from .templates.forms.post_form import NewPostForm
 
 @login_required
 def display_post(request, post_id, post_op_id):
-    post = get_object_or_404(BasePost, id=post_id)
+    post = Post.objects.filter(id=post_id)
+    if not post:
+        post = Quote.objects.filter(id=post_id)
+        if not post:
+            post = Comment.objects.filter(id=post_id)
+            if not post:
+                raise Http404("Display object does not exist")
+            
+    post = post.first()
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
     
     # get comments, filter out op comments from others
     latest_comments_raw = post.comments.all()
     latest_comments_op = latest_comments_raw.filter(poster_id=post_op_id)
     latest_comments_all = latest_comments_raw.exclude(poster_id=post_op_id)
 
-    og_post_info = create_combined_posts([post])
-    op_post_comments = create_combined_posts(latest_comments_op)
-    latest_comments = create_combined_posts(latest_comments_all)
+    og_post_info = create_combined_posts([post], requester)
+    op_post_comments = create_combined_posts(latest_comments_op, requester)
+    latest_comments = create_combined_posts(latest_comments_all, requester)
 
-    context = {'og_post':og_post_info, 'op_comments':op_post_comments, 'latest_comments_list':latest_comments}
+    context = {'og_post':og_post_info, 'op_comments':op_post_comments, 'latest_comments_list':latest_comments, "new_comment_form": NewCommentFormLite(),}
 
     return render(request, "display_post.html", context)
 
@@ -98,11 +108,19 @@ def get_comments_count(request, post_id):
 
 @login_required
 def create_quote(request, post_id):
-    og_post = get_object_or_404(BasePost, id=post_id)
+    og_post = Post.objects.filter(id=post_id)
+    if not og_post:
+        og_post = Quote.objects.filter(id=post_id)
+        if not og_post:
+            og_post = Comment.objects.filter(id=post_id)
+            if not og_post:
+                raise Http404("Quote object does not exist")
+            
+    og_post = og_post.first()
 
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
-        form = NewPostForm(request.POST)
+        form = NewCommentForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             poster_cu = get_object_or_404(CustomUser, email=request.user.get_username())
@@ -122,10 +140,8 @@ def create_quote(request, post_id):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = NewPostForm()
-        og_post_stripped = {
-            "body":og_post.body,
-        }
+        form = NewCommentForm()
+        og_post_stripped = create_quote_post_in_modal_object(og_post)
 
     return render(request, "new_quote.html", {"form": form, "og_post": og_post_stripped})
 
@@ -152,7 +168,6 @@ def create_comment(request, post_id):
                 raise Http404("Comment object does not exist")
             
     og_post = og_post.first()
-    print("Object type", type(og_post))
 
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
@@ -233,5 +248,18 @@ def delete_post(request, post_id):
     else:
         return redirect(reverse('homepage:home')) # homepage
     
+@login_required
+def pin_post(request, post_id):
+    post = get_object_or_404(BasePost, id=post_id)
+    og_poster_up = get_object_or_404(UserProfile, id=post.poster_id)
+    og_poster = get_object_or_404(CustomUser, id=og_poster_up.user_id)
+
+    if request.user.get_username() == og_poster.get_username():   
+        post.pinned = True
+        post.save()
+
+        return HttpResponse(status=200)
+    else:
+        return redirect(reverse('homepage:home')) # homepage    
 
 

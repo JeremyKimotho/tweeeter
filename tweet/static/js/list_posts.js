@@ -2,7 +2,8 @@ const comment_modal = new bootstrap.Modal(document.getElementById("comment-modal
 const quote_modal = new bootstrap.Modal(document.getElementById("quote-modal"));
 const post_form_homepage = document.getElementById("new-post-form-textarea");
 const delete_post_modal = new bootstrap.Modal(document.getElementById("delete-post-modal"));
-const block_user_modal = new bootstrap.Modal(document.getElementById("block-user-modal"))
+const block_user_modal = new bootstrap.Modal(document.getElementById("block-user-modal"));
+const pin_text_links = document.querySelectorAll('.pin-text');
 
 console.log("I homepage.js was loaded in and is getting active ! ")
 
@@ -22,6 +23,16 @@ htmx.on("htmx:afterSwap", (e) => {
     
   } else if (e.detail.target.id == "quote") {
     quote_modal.show()
+
+    const textareas = document.querySelectorAll('.auto-expand');
+
+    textareas.forEach(textarea => {
+      textarea.addEventListener('input', function () {
+        this.style.height = 'auto'; // Reset height
+        this.style.height = `${this.scrollHeight}px`; // Set to scrollHeight
+      });
+    });
+    
   } 
   else if (e.detail.target.id == "block-user") {
     block_user_modal.show();
@@ -57,15 +68,7 @@ htmx.on("htmx:afterRequest", (e) => {
   if (e.target.id == "new-post-form-textarea") {
     post_form_homepage.reset()
   }
-})
-
-document.body.addEventListener('htmx:afterRequest', function(event) {
-    // Check if the form that triggered the request is the one we want to clear
-    if (event.target.id === "new-post-form-textarea") {
-      // Reset the form after submission
-      post_form_homepage.reset();
-    }
-  }, true);       
+})      
 
 document.addEventListener('click', function (event) {
   var dropdowns = document.querySelectorAll('.dropdown-menu');
@@ -73,9 +76,23 @@ document.addEventListener('click', function (event) {
     // Check if click is outside the dropdown and its button
     if (!dropdown.contains(event.target) && !dropdown.previousElementSibling.contains(event.target)) {
       dropdown.classList.remove('show');
+    } else if (dropdown.contains(event.target)) {
+      dropdown.classList.remove('show');
     }
   });
 }, true);
+
+pin_text_links.forEach(function (pinText) {
+  pinText.addEventListener('click', function () {
+  
+    var toastEl = document.getElementById('myToast');
+    var toast = new bootstrap.Toast(toastEl);
+    toast.show();
+    console.log("pinText listener added")
+  }, true);
+
+}, true);
+
 
 
 

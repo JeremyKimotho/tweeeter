@@ -131,7 +131,7 @@
                     </nav>
                 </div>
                 <!-- New Post Form -->
-                <div class="container homepage_post_form">
+                <div class="container homepage-post-form">
                     {% include "new_post_lite.html" with form=new_post_form %}
                 </div>
                 {% endif %}
@@ -143,7 +143,7 @@
                     {% endblock %}
                 </div>
             </div>
-            <div class="col-3 d-flex flex-column align-items-center">
+            <div class="col-3 d-flex flex-column align-items-center explore-info-base">
                 <div class="container">
                     <div class="row">
                         <form class="d-flex" role="search" action="{% url 'homepage:search' %}" method="post">
@@ -159,6 +159,15 @@
     <!-- Create Post Navbar Modal -->
     <div id="modal" class="modal fade post-modal-navbar-div overtop-overlay-content">
         <div id="dialog" class="modal-dialog" hx-target="this"></div>
+    </div>
+
+    <div id="myToast" class="toast position-fixed bottom-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Post Pinned
+        </div>
     </div>
 
     <!-- jQuery -->

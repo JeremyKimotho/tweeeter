@@ -30,32 +30,7 @@
             </a>
         </nav>
     </div>
-    <div class="content-wrapper">
-        <p></p>
-        {% if latest_posts %}
-        {% include 'post_individual.html' with latest_posts_list=latest_posts%}
-        {% endif %}
-               
-        <!-- Create Comment Modal -->
-        <div id="comment-modal" class="modal fade">
-            <div id="comment" class="modal-dialog" hx-target="this"></div>
-        </div>
-        
-        <!-- Create Quote Modal -->
-        <div id="quote-modal" class="modal fade">
-            <div id="quote" class="modal-dialog" hx-target="this"></div>
-        </div>
-
-        <!-- Block User Modal -->
-        <div id="block-user-modal" class="modal fade overtop-overlay-content">
-            <div id="block-user" class="modal-dialog" hx-target="this"></div>
-        </div>
-
-        <!-- Delete Post Modal -->
-        <div id="delete-post-modal" class="modal fade overtop-overlay-content">
-            <div id="delete-post" class="modal-dialog" hx-target="this"></div>
-        </div>
-    </div>
+    {% include 'list_profile_posts.html' with latest_profile_posts=latest_posts %}
 </div>
 {% endblock %}
 

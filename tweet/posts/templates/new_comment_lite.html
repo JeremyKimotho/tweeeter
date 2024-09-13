@@ -1,5 +1,5 @@
 {% load static %}
-<form hx-post="{% url 'posts:create_post' %}" class="modal-content" id="new-post-form-textarea">
+<form hx-post="{{ request.path }}" class="modal-content" id="new-comment-form-textarea">
   {% csrf_token %}
   <div class="modal-body">
     <div class="row">
@@ -13,7 +13,6 @@
   </div>
   <div class="modal-footer">
     <span id="character-indicator"></span>
-    <button id="modal-post-button" type="submit"><h3>Post</h3></button>
+    <button id="modal-reply-button" type="submit"><h3>Reply</h3></button>
   </div>
 </form>
-

@@ -15,6 +15,7 @@ class BasePost(models.Model):
     quotes = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='post_quotes') 
     comments = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='post_comments')
     date_posted = models.DateTimeField(default=timezone.now)
+    pinned = models.BooleanField(default=False)
 
     def getLikes(self):
         return self.likes.count()

@@ -2,7 +2,7 @@
 
 {% for post in latest_posts_list %}
 <div class="card-container">
-    <div id="individual-post-div" class="card" onclick="window.location.href='{% url 'posts:display_post' post.post.id post.poster_profile.id %}';event.stopPropagation();">
+    <div id="individual-post-div" class="card individual-post-div" onclick="window.location.href='{% url 'posts:display_post' post.post.id post.poster_profile.id %}';event.stopPropagation();">
         <div class="card-header">
             <div class="container">
                 <div class="row text-center">
@@ -35,18 +35,18 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" id="pin-text" hx-get="" hx-target="" onclick="event.stopPropagation();">
+                                <a class="dropdown-item pin-text" id="pin-text-{{post.post.id}}" hx-get="{% url 'posts:pin_post' post.post.id %}" onclick="event.stopPropagation();">
                                     <i class="fa-solid fa-thumbtack"></i> Pin to profile
                                 </a>
                             </li>
                             {% else %}
                             <li>
-                                <a class="dropdown-item" id="block-text" hx-get="" hx-target="#block-user" onclick="event.stopPropagation();">
+                                <a class="dropdown-item" id="block-text" hx-get="{% url 'profile:block' post.poster_profile.id %}" hx-target="#block-user" onclick="event.stopPropagation();">
                                     <i class="fa-solid fa-ban"></i> Block @{{ post.poster_account.username }}
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" id="mute-text" hx-get="" hx-target="" onclick="event.stopPropagation();">
+                                <a class="dropdown-item" id="mute-text" hx-get="{% url 'profile:mute' post.poster_profile.id %}" hx-target="#block-user" onclick="event.stopPropagation();">
                                     <i class="fa-solid fa-volume-xmark"></i> Mute @{{ post.poster_account.username }}
                                 </a>
                             </li>
@@ -126,7 +126,9 @@
                         <!-- Bookmark Icon: Bookmarked State -->
                         <!-- <i class="fa-solid fa-bookmark bookmarked-icon-change"></i>  -->
                     </button>
+                    {% if post.post.own_post %}
                     <span class="ms-2" id="post-bookmarks-{{ post.post.id }}">{{ post.bookmarks_count }}</span> <!-- Counter or any text -->
+                    {% endif %}
                     </div>
                 </div>
             </div>

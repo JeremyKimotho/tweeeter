@@ -41,9 +41,11 @@
                     </div>
                     {% endif %}
 
+                    {% if reply %}
                     <p class="post-body-text" id="comment-modal-reply-info-div">
                         <span id="reply-username-text">Replying to <a href="{% url 'profile:view_profile' post.poster_profile.id %}">@{{ post.poster_account.username }}</a></span>
                     </p>
+                    {% endif %}
                 </div>
             </div>
         </div>

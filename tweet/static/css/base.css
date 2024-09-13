@@ -206,7 +206,7 @@ li h3 {
   box-shadow: none;
 }
 
-.custom-text-field:focus .homepage_post_form .modal-footer{
+.custom-text-field:focus .homepage-post-form .modal-footer{
   border-top: 0.5px solid #C0C0C0;
 }
 
@@ -220,7 +220,7 @@ li h3 {
 }
 
 .post-modal-navbar-div .modal-header {
-  height: 50%;
+  max-height: auto;
   border:none;
 }
 
@@ -246,18 +246,22 @@ li h3 {
   padding-right:5px;
 }
 
-.homepage_post_form .post-form-body {
+.homepage-post-form .post-form-body {
   margin-left:-9%;
 }
 
-.homepage_post_form .modal-body {
+.homepage-post-form .modal-body {
   border: 0.5px solid #C0C0C0;
   border-bottom:none;
   padding-top: 1.5%;
   padding-left: 5%;
 }
 
-.homepage_post_form .modal-footer {
+.homepage-post-form .modal-body img {
+  padding-top:4%;
+}
+
+.homepage-post-form .modal-footer {
   padding-top:2%;
   padding-bottom:2%;
   padding-right:2%;
@@ -265,14 +269,14 @@ li h3 {
   border-top:none;
 }
 
-.homepage_post_form .modal-footer button {
+.homepage-post-form .modal-footer button {
   background-color: green;
   color:white;
   border:none;
   border-radius: 50px;
 }
 
-.homepage_post_form .modal-footer h3 {
+.homepage-post-form .modal-footer h3 {
   font-size: 20px;
   padding-left:5px;
   padding-right:5px;
@@ -292,29 +296,33 @@ li h3 {
 }
 
 .homepage-home-indicator-text .nav-pills .nav-link {
-    color: black
+  color: black
 }
 
 .homepage-home-indicator-text .nav-pills .nav-link.active {
-    background-color: white; 
-    color: black;
-  }
+  background-color: white; 
+  color: black;
+}
 
 .homepage-home-indicator-text .nav-pills .bottom-border-central {
-    position: relative;
-    padding-top: 10px;
-    padding-bottom: 0;
-    text-align: center;
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 0;
+  text-align: center;
 }
 
 .homepage-home-indicator-text .nav-pills .nav-link.active .bottom-border-central::after {
-    content : '';
-    position: absolute;
-    bottom: 0;
-    left: 45%; /* Center it by offsetting from left */
-    width: 10%; /* The border will cover 80% of the width */
-    border-bottom: 5.5px solid green; /* The actual bottom border */
-    border-radius: 5px;
+  content : '';
+  position: absolute;
+  bottom: 0;
+  left: 45%; /* Center it by offsetting from left */
+  width: 10%; /* The border will cover 80% of the width */
+  border-bottom: 5.5px solid green; /* The actual bottom border */
+  border-radius: 5px;
 }
+
+/* .explore-info-base {
+  border-left: solid black;
+} */
 
 

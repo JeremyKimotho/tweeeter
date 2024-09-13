@@ -22,6 +22,8 @@ class UserProfile(models.Model):
     display_name = models.CharField(max_length=18, default='New User')
     bio = models.CharField(max_length=80, default='I\'m new here ! :)')
     background_picture = models.CharField(default='background1.jpg')
+    blocked_list = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='user_blocks')
+    muted_list = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='user_muted')
 
     def getFollowers(self):
         return self.followers.count()

@@ -12,7 +12,7 @@ from posts.models import Quote
 from users.models import CustomUser
 from user_profile.models import UserProfile
 
-from posts.templates.forms.post_form_lite import NewPostFormLite
+from posts.templates.forms.post_form import NewPostFormLite
 
 def format_number(num=None):
     if num is None:
@@ -106,8 +106,6 @@ def create_quote_post_in_modal_object(post):
             "quote_post":create_post_in_post_object(post.quote_post)
         }
 
-        print(post_stripped)
-
     else:
         # Take only the data we need from post object
         post_stripped = {
@@ -116,8 +114,6 @@ def create_quote_post_in_modal_object(post):
             "pub_date":post.date_posted,
             "time_since":time_since_post(post)
         }
-
-        print(post_stripped)
 
     # Take only the data we need from user profile object
     profile_stripped = {
@@ -287,7 +283,7 @@ def view_posts(request):
     quotes = create_combined_posts(latest_quotes, requester)
     posts += quotes
 
-    context = {"latest_posts": posts, "new_post_form": NewPostFormLite(), "homepage": True, "profile": create_combined_profile(request, requester, requester_cu)}
+    context = {"latest_posts": posts, "new_post_form": NewPostFormLite(), "homepage": True, "profile": create_combined_profile(request, requester, requester_cu), "username": requester_cu.user_name, }
     return render(request, "homepage.html", context)
 
 @login_required

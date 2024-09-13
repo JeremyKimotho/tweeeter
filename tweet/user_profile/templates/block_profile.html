@@ -1,0 +1,18 @@
+{% load static %}
+
+<form hx-post="{{ request.path }}" class="modal-content">
+  {% csrf_token %}
+    <div class="modal-body">
+        <div class="row">
+            {% if type %}
+            <span>Are you sure you want to block this user ? You will not be able to see any posts from this user or view their profile until you unblock them. (This can be done in settings) </span>
+            {% else %}
+            <span>Are you sure you want to mute this user ? You will not see any posts from this user until you unmute them. (This can be done in settings) </span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="modal-post-close" type="button" data-bs-dismiss="modal">No Cancel</button>
+        <button id="modal-reply-button" type="submit"><h3>Yes Delete</h3></button>
+    </div>
+</form>

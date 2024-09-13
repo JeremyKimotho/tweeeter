@@ -230,16 +230,16 @@ def edit_profile(request):
             poster_cu = get_object_or_404(CustomUser, email=request.user.get_username())
             poster = get_object_or_404(UserProfile, user_id=poster_cu.id)
 
-            if form.cleaned_data['display_name'] != None:
+            if form.cleaned_data['display_name'] != None and form.cleaned_data['display_name'] != "":
                 poster.display_name=form.cleaned_data['display_name']
             
-            if form.cleaned_data['location'] != None:
+            if form.cleaned_data['location'] != None and form.cleaned_data['location'] != "":
                 poster.location=form.cleaned_data['location']
 
-            if form.cleaned_data['bio'] != None:
+            if form.cleaned_data['bio'] != None and form.cleaned_data['bio'] != "":
                 poster.bio=form.cleaned_data['bio']
                 
-            if form.cleaned_data['date_of_birth'] != None:
+            if form.cleaned_data['date_of_birth'] != None and form.cleaned_data['date_of_birth'] != "":
                 poster_cu.date_of_birth=form.cleaned_data['date_of_birth']
 
             poster.save()
@@ -273,3 +273,33 @@ def go_back(request):
             return redirect(back_page)
         
     return redirect(reverse('homepage:home'))
+
+@login_required
+def block_profile(request, profile_id):
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+    profile = get_object_or_404(UserProfile, id=profile_id)
+
+    if requester != profile:   
+        if request.method == "POST":
+            requester.blocked_list.add(profile)
+            return HttpResponse(status=204)
+
+        return render(request, "block_profile.html", {"type":"block"})
+    else:
+        return redirect(reverse('homepage:home')) # homepage
+
+@login_required
+def mute_profile(request, profile_id):
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+    profile = get_object_or_404(UserProfile, id=profile_id)
+
+    if requester != profile:   
+        if request.method == "POST":
+            requester.muted_list.add(profile)
+            return HttpResponse(status=204)
+
+        return render(request, "block_profile.html",)
+    else:
+        return redirect(reverse('homepage:home')) # homepage
