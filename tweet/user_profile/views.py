@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
@@ -239,8 +240,10 @@ def edit_profile(request):
             if form.cleaned_data['bio'] != None and form.cleaned_data['bio'] != "":
                 poster.bio=form.cleaned_data['bio']
                 
-            if form.cleaned_data['date_of_birth'] != None and form.cleaned_data['date_of_birth'] != "":
-                poster_cu.date_of_birth=form.cleaned_data['date_of_birth']
+            day = form.cleaned_data['day']
+            month = form.cleaned_data['month']
+            year = form.cleaned_data['year']
+            poster_cu.date_of_birth=datetime.date(int(year),int(month),int(day))
 
             poster.save()
             poster_cu.save()
@@ -248,9 +251,19 @@ def edit_profile(request):
         return HttpResponse(status=204)
     
     else:
-        form = ProfileChangeForm()
+        user_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+        user_p = get_object_or_404(UserProfile, user_id=user_cu.id)
+        user_profile_stripped = create_combined_profile(request, user_p, user_cu)
 
-    return render(request, "profile_edit.html", {"form": form})
+        form = ProfileChangeForm(initial={
+            'display_name': user_profile_stripped['display_name'],
+            'location': user_profile_stripped['location'],
+            'month': user_profile_stripped['dob'].month,
+            'day': user_profile_stripped['dob'].day,
+            'year': user_profile_stripped['dob'].year,
+        })
+
+    return render(request, "profile_edit.html", {"form": form, "profile": user_profile_stripped})
 
 # def view_user_dp(request, profile_id):
 #     user = get_object_or_404(UserProfile, id=user_id)
@@ -303,3 +316,9 @@ def mute_profile(request, profile_id):
         return render(request, "block_profile.html",)
     else:
         return redirect(reverse('homepage:home')) # homepage
+    
+@login_required
+def edit_birthday(request, profile_id):
+    if request.method == "POST":
+        return HttpResponse(status=204)
+    return render(request, "edit_birthday_confirm.html",)

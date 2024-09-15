@@ -231,15 +231,43 @@
     padding-top:0;
 }
 
-#edit-profile-modal .edit-field {
-    width: auto;
-    /* border: solid black; */
+#edit-profile-modal .birthday-field p {
+    font-size:20px;
 }
 
-#edit-profile-modal .edit-field p{
-    padding-bottom: -2%;
-    padding-top: 0;
+#edit-profile-modal .edit-field .edit-birthday-field {
+    display:none;
 }
 
+#edit-profile-modal .edit-field .edit-birthday-field .fields {
+    font-size:20px;
+}
 
+#edit-profile-modal .edit-field .edit-birthday-field .fields select{
+    width:100%;
+    padding-top:20px;
+    border: 0.5px solid #C0C0C0;
+    border-radius: 5px; 
+}
 
+#edit-profile-modal .edit-field .edit-birthday-field p{
+    color:#696969	; 
+}
+
+#edit-profile-modal .edit-field #p-change-form-name,  #edit-profile-modal .edit-field #p-change-form-location{
+    padding-top: 18px;
+}
+
+#edit-profile-modal .edit-field label {
+    position: absolute;
+    font-size:12px;
+    color: grey;
+    z-index: 10;
+    padding-top:0.25%;
+    padding-left:1%;
+}
+#edit-profile-modal .edit-field .label-text {
+    padding-left:4%;
+}
+
+    

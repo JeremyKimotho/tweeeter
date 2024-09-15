@@ -16,9 +16,9 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="row edit-field">
-        <!-- <p>Name:</p> -->
+    <div class="row edit-field">
+      <div class="row">
+        <label class="label-text" id="name-label">Name</label>
         <p>{{ form.display_name }}</p>
       </div>
       
@@ -27,12 +27,37 @@
       </div>
 
       <div class="row">
+        <label class="label-text" id="location-label">Location</label>
         <p>{{ form.location }}</p>
       </div>
 
       <div class="row">
-        <p>Date of Birth:</p>
-        <p>{{ form.date_of_birth }}</p>
+        <p>Date of Birth: <a href="#" id="confirm-edit-birthday-button">Edit</a></p>
+
+        <div id="birthday-field" class="birthday-field">
+          <p>{{ profile.dob | date:"F d, Y" }}</p>
+        </div>
+        
+        <div id="edit-birthday" class="edit-birthday-field">
+          <p>
+            This should be the date of birth of the person using the account. Even if you’re making an account for your business, event, or cat.
+          </p>
+          <div class="row">
+            <div class="col-6 fields">
+              <label>Month</label>
+              {{ form.month }}
+            </div>
+            <div class="col-3 fields">
+              <label>Day</label>
+              {{ form.day }}
+            </div>
+            <div class="col-3 fields">
+              <label>Year</label>
+              {{ form.year }}
+            </div>
+            </div>
+          </div>
+        </div>
       </div>
       
     </div>
