@@ -1,8 +1,8 @@
 const comment_modal = new bootstrap.Modal(document.getElementById("comment-modal"));
 const quote_modal = new bootstrap.Modal(document.getElementById("quote-modal"));
-const post_form_homepage = document.getElementById("new-post-form-textarea");
 const delete_post_modal = new bootstrap.Modal(document.getElementById("delete-post-modal"));
 const block_user_modal = new bootstrap.Modal(document.getElementById("block-user-modal"));
+
 const pin_text_links = document.querySelectorAll('.pin-text');
 
 console.log("I homepage.js was loaded in and is getting active ! ")
@@ -20,6 +20,17 @@ htmx.on("htmx:afterSwap", (e) => {
         this.style.height = `${this.scrollHeight}px`; // Set to scrollHeight
       });
     });
+
+    const comment_form_homepage_button = document.getElementById("modal-comment-reply-button");
+    const comment_form_homepage = document.getElementById("new-comment-form-id");
+
+    comment_form_homepage.addEventListener('input', function() {
+      if(comment_form_homepage.value.trim() === "") {
+        comment_form_homepage_button.style.opacity="0.5";
+      } else {
+        comment_form_homepage_button.style.opacity="1";
+      }
+    });
     
   } else if (e.detail.target.id == "quote") {
     quote_modal.show()
@@ -31,6 +42,17 @@ htmx.on("htmx:afterSwap", (e) => {
         this.style.height = 'auto'; // Reset height
         this.style.height = `${this.scrollHeight}px`; // Set to scrollHeight
       });
+    });
+
+    const quote_form_homepage_button = document.getElementById("modal-quote-reply-button");
+    const quote_form_homepage = document.getElementById("new-comment-form-id");
+
+    quote_form_homepage.addEventListener('input', function() {
+      if(quote_form_homepage.value.trim() === "") {
+        quote_form_homepage_button.style.opacity="0.5";
+      } else {
+        quote_form_homepage_button.style.opacity="1";
+      }
     });
     
   } 
@@ -64,11 +86,11 @@ htmx.on("hidden.bs.modal", () => {
   document.getElementById("quote").innerHTML = ""
 })
 
-htmx.on("htmx:afterRequest", (e) => {
-  if (e.target.id == "new-post-form-textarea") {
-    post_form_homepage.reset()
-  }
-})      
+// htmx.on("htmx:afterRequest", (e) => {
+//   if (e.target.id == "new-post-form-textarea") {
+//     post_form_homepage.reset()
+//   }
+// })      
 
 document.addEventListener('click', function (event) {
   var dropdowns = document.querySelectorAll('.dropdown-menu');
@@ -92,7 +114,6 @@ pin_text_links.forEach(function (pinText) {
   }, true);
 
 }, true);
-
 
 
 

@@ -235,15 +235,15 @@ li h3 {
 
 .post-modal-navbar-div #modal-post-button {
   background-color: green;
+  opacity: 0.5;
   color:white;
   border:none;
   border-radius: 50px;
-}
-
-.post-modal-navbar-div .modal-footer h3 {
   font-size: 20px;
-  padding-left:5px;
-  padding-right:5px;
+  padding: 2%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  font-weight: 500;
 }
 
 .homepage-post-form .post-form-body {
@@ -271,6 +271,7 @@ li h3 {
 
 .homepage-post-form .modal-footer button {
   background-color: green;
+  opacity: 0.5;
   color:white;
   border:none;
   border-radius: 50px;

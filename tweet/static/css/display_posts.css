@@ -71,6 +71,7 @@
   color:white;
   border:none;
   border-radius: 50px;
+  opacity: 0.5;
 }
 
 .comment-form .modal-footer h3 {

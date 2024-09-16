@@ -209,7 +209,8 @@
 #edit-profile-modal .button-fl-fr-text {
     background-color:black;
     color:white;
-    border-radius:5px;
+    border-radius:50px;
+    font-size:18px;
 }
 
 #edit-profile-modal .custom-text-field {

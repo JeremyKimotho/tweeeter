@@ -191,8 +191,9 @@
     margin-left:-9%;
 }
 
-#comment-modal #modal-reply-button {
+#comment-modal #modal-comment-reply-button, #comment-modal #modal-comment-lite-reply-button {
   background-color: green;
+  opacity: 0.5;
   color:white;
   border:none;
   border-radius: 50px;
@@ -283,8 +284,9 @@
     padding-top: 7%;
 }
 
-#quote-modal #modal-reply-button {
+#quote-modal #modal-quote-reply-button {
   background-color: green;
+  opacity: 0.5;
   color:white;
   border:none;
   border-radius: 50px;
@@ -347,7 +349,7 @@
     margin-top:-8%;
 }
 
-#block-user-modal .footer #modal-reply-button {
+#block-user-modal .footer #modal-block-user-button {
     background-color: red;
     color:white;
     border-radius:50px;
@@ -382,7 +384,7 @@
     margin-top:-8%;
 }
 
-#delete-post-modal .footer #modal-reply-button {
+#delete-post-modal .footer #modal-block-user-button {
     background-color: red;
     color:white;
     border-radius:50px;
