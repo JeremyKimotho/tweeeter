@@ -3,6 +3,10 @@
     border-radius: 0%;
 }
 
+#comment-modal .modal-dialog, #quote-modal .modal-dialog {
+    max-width: 600px;
+}
+
 #profile-pic {
     max-width: 75%;
     max-height:75%;
@@ -313,6 +317,76 @@
     width:auto;
     height:auto;
     padding: 0;
+} 
+
+#block-user-modal .modal-body .body {
+    font-size:18px;
+    text-align: center;
+    font-weight:600;
+}
+
+#block-user-modal .modal-body p {
+    color:#696969;
+    font-weight:400;
+}
+
+#block-user-modal .footer button {
+    width:100%;
+    padding:3%;
+}
+
+#block-user-modal .footer p {
+    color:white;
+}
+
+#block-user-modal .footer #modal-post-close {
+    background-color: black;
+    color:white;
+    border-radius:50px;
+    font-size:18px;
+    margin-top:-8%;
+}
+
+#block-user-modal .footer #modal-reply-button {
+    background-color: red;
+    color:white;
+    border-radius:50px;
+    font-size:18px;
+}
+ 
+#delete-post-modal .modal-body .body {
+    font-size:18px;
+    text-align: center;
+    font-weight:600;
+}
+
+#delete-post-modal .modal-body p {
+    color:#696969;
+    font-weight:400;
+}
+
+#delete-post-modal .footer button {
+    width:100%;
+    padding:3%;
+}
+
+#delete-post-modal .footer p {
+    color:white;
+}
+
+#delete-post-modal .footer #modal-post-close {
+    background-color: black;
+    color:white;
+    border-radius:50px;
+    font-size:18px;
+    margin-top:-8%;
+}
+
+#delete-post-modal .footer #modal-reply-button {
+    background-color: red;
+    color:white;
+    border-radius:50px;
+    font-size:18px;
 }
 
 

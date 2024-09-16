@@ -317,8 +317,3 @@ def mute_profile(request, profile_id):
     else:
         return redirect(reverse('homepage:home')) # homepage
     
-@login_required
-def edit_birthday(request, profile_id):
-    if request.method == "POST":
-        return HttpResponse(status=204)
-    return render(request, "edit_birthday_confirm.html",)

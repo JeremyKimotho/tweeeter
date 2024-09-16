@@ -26,6 +26,4 @@ urlpatterns=[
     path("manage-follows/<int:profile_id>/", views.manage_follows, name="follow_user"),
     path("block-profile/<int:profile_id>/", views.block_profile, name='block'),
     path("mute-profile/<int:profile_id>/", views.mute_profile, name='mute'),
-    path("edit-birthday/<int:profile_id>/", views.edit_birthday, name='edit_birthday'),
-
 ]

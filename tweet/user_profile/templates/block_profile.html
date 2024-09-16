@@ -2,17 +2,34 @@
 
 <form hx-post="{{ request.path }}" class="modal-content">
   {% csrf_token %}
-    <div class="modal-body">
+    <div class="modal-header">
         <div class="row">
             {% if type %}
-            <span>Are you sure you want to block this user ? You will not be able to see any posts from this user or view their profile until you unblock them. (This can be done in settings) </span>
+            <h3 style="font-weight:600; font-size: 22px; margin-left: 50%;">Block Profile</h3>
             {% else %}
-            <span>Are you sure you want to mute this user ? You will not see any posts from this user until you unmute them. (This can be done in settings) </span>
+            <h3 style="font-weight:600; font-size: 22px; margin-left: 50%;">Mute Profile</h3>
             {% endif %}
         </div>
     </div>
-    <div class="modal-footer">
-        <button id="modal-post-close" type="button" data-bs-dismiss="modal">No Cancel</button>
-        <button id="modal-reply-button" type="submit"><h3>Yes Delete</h3></button>
+    <div class="modal-body">
+        <div class="row body">
+            {% if type %}
+            <span style="font-weight: 600; text-align: center;">Are you sure you want to block this user ?</span>
+            <p style="font-weight: 400; text-align: center;">You will not be able to see any posts from this user or view their profile until you unblock them</p>
+            {% else %}
+            <span style="font-weight: 600; text-align: center;">Are you sure you want to mute this user ?</span>
+            <p style="font-weight: 400; text-align: center;">You will not see any posts from this user appear on your timeline until you unmute them</p>
+            {% endif %}
+        </div>
+        <div class="row footer">
+            {% if type %}
+            <button id="modal-reply-button" type="submit">Block</button>
+            {% else %}
+            <button id="modal-reply-button" type="submit">Mute</button>
+            {% endif %}
+            
+            <p>.</p>
+            <button id="modal-post-close" type="button" data-bs-dismiss="modal">Cancel</button>
+        </div>
     </div>
 </form>

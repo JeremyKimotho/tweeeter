@@ -181,7 +181,7 @@ li h3 {
   
 }
 
-.modal-dialog {
+#modal .modal-dialog {
   max-width: 600px;
 }
 
