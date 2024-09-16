@@ -38,7 +38,7 @@ li h3 {
   align-items: center;
 }
 
-.navbar-base img {
+.navbar-base .brand-div img {
   margin-left:5%;
   position: fixed;
   width:10%;
@@ -76,7 +76,7 @@ li h3 {
 }
 
 #populate-button-nav {
-  margin-top: 45%;
+  margin-top: 38%;
   position: fixed;
   margin-left:7%;
   padding-right:7%;
@@ -89,8 +89,8 @@ li h3 {
 #populate-button-nav button{
   text-decoration: none;
   border:none;
-  padding-bottom:7%;
-  padding-top:7%; 
+  padding-bottom:2%;
+  padding-top:2%; 
   margin-left:50%;
   background-color: inherit;
 }
@@ -111,38 +111,15 @@ li h3 {
 }
 
 #logout-button-nav {
-  bottom: 1%;
-  position: fixed;
-  margin-left: 7%;
-  padding-right:7%;
-  border-radius:50px; 
-  background-color: white;
-  border: solid green;
-}
-
-#logout-button-nav:hover {
-  cursor: pointer;
-}
-
-#logout-button-nav button {
-  text-decoration: none;
-  border:none;
-  padding-bottom:7%;
-  padding-top:7%; 
-  margin-left:65%;
-  background-color: inherit;
-  width:100%
-}
-
-#logout-button-nav h3 {
-  font-size: 22px;
-  font-weight:400;
-  color:green;
+  border: solid black;
+  position: absolute;
+  bottom:0;
+  max-width:15%;
 }
 
 /* For screens larger than 1441px */
 @media (min-width: 1441px) {
-  .navbar-base img {
+  .navbar-base .brand-div img {
     margin-left:1.75%;
     margin-top: -0.5%;
   }
@@ -171,12 +148,7 @@ li h3 {
   }
 
   #logout-button-nav {
-    margin-left:3%;
-    padding-right:5.5%;
-  }
-
-  #logout-button-nav button{
-    margin-left:75%;
+    max-width:10%;
   }
   
 }
@@ -322,8 +294,6 @@ li h3 {
   border-radius: 5px;
 }
 
-/* .explore-info-base {
-  border-left: solid black;
-} */
+
 
 
