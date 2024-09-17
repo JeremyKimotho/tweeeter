@@ -31,6 +31,7 @@ li h3 {
 
 .navbar-base {
   background-color: white;
+  /* position: fixed; */
 }
 
 .navbar-buttons {
@@ -58,15 +59,17 @@ li h3 {
   text-decoration: none;
   border:none;
   padding-bottom:10%;
-  padding-top:10%; 
-  margin-left:100%;
+  padding-top:10%;
+  margin-left:108%;
   background-color: inherit;
+  border-radius:50px; 
+  font-size: 22px;
+  color: white;
 }
 
 #post-button-nav:hover {
   background-color: darkgreen;
   cursor: pointer;
-
 }
 
 #post-button-nav h3 {
@@ -93,28 +96,61 @@ li h3 {
   padding-top:2%; 
   margin-left:50%;
   background-color: inherit;
+  font-size: 22px;
+  font-weight:400;
+  color:red;
+  transition: color 2s ease;
 }
 
 #populate-button-nav:hover {
   background-color: red;
-  cursor: pointer;;
+  cursor: pointer;
 }
 
-#populate-button-nav:hover h3{
+#populate-button-nav:hover button{
   color:white;
 }
 
-#populate-button-nav h3 {
-  font-size: 22px;
-  font-weight:400;
-  color:red;
+#logout-button-nav {
+  position: fixed;
+  bottom:0;
+  left:13%;
+  max-width:15%;
+  padding-bottom:1%;
 }
 
-#logout-button-nav {
-  border: solid black;
-  position: absolute;
-  bottom:0;
-  max-width:15%;
+#logout-button-nav #logout-button-view{
+  display: none;
+}
+
+#logout-button-nav #logout-button-view button{
+  border:none;
+  color:white;
+  background-color: red;
+  border-radius:50px;
+  font-size:24px;
+}
+
+#logout-button-nav #profile-info-view {
+  padding-top:4%;
+}
+
+#logout-button-nav #profile-info-view .text-portion {
+  margin-left:-8%;
+}
+
+#logout-button-nav #profile-info-view .name-text-logout {
+  font-weight: 600;
+  padding-bottom: 0;
+}
+
+#logout-button-nav #profile-info-view .username-text-logout {
+  color:grey;
+  padding-top:0;
+}
+
+#logout-button-nav:hover #logout-button-view{
+  display: block;
 }
 
 /* For screens larger than 1441px */
@@ -135,7 +171,7 @@ li h3 {
   }
 
   #post-button-nav button{
-    margin-left:125%;
+    margin-left:130%;
   }
 
   #populate-button-nav {
@@ -149,6 +185,8 @@ li h3 {
 
   #logout-button-nav {
     max-width:10%;
+    left:28%;
+    padding-bottom:0.5%;
   }
   
 }
@@ -293,6 +331,9 @@ li h3 {
   border-bottom: 5.5px solid green; /* The actual bottom border */
   border-radius: 5px;
 }
+
+
+
 
 
 

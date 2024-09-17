@@ -5,7 +5,7 @@
 
     <div class="row" id="logout-button-view">
         <button type="submit">
-            <h3>Logout</h3>
+            Logout
         </button>
     </div>
 
@@ -15,9 +15,10 @@
                 <img class="img-fluid rounded-circle" src="{% static 'images/user1.avif' %}" alt="profile picture">
             </div>
         </div>
-        <div class="col-8">
-            <p>{{ profile_data.display_name }}</p>
-            <p>{{profile_data.username }}</p>
+        <div class="col-8 text-portion">
+            <span class="name-text-logout">{{ profile_info.display_name }}</span>
+            <br>
+            <span class="username-text-logout">@{{profile_info.username }}</span>
         </div>
     </div>
 </form>

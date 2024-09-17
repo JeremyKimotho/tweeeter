@@ -31,7 +31,7 @@ def view_user_following(request, profile_id):
     latest_following = create_combined_profiles(request, following)
     user_profile = create_combined_profile(request, user_profile, user_account)
 
-    context = {"latest_following_list": latest_following, "profile_data": user_profile,}
+    context = {"latest_following_list": latest_following, "profile_data": user_profile, "profile": user_profile}
     return render(request, "view_following.html", context)
 
 
@@ -44,7 +44,7 @@ def view_user_followers(request, profile_id):
     latest_followers = create_combined_profiles(request, followers)
     user_profile = create_combined_profile(request, user_profile, user_account)
 
-    context = {"latest_followers_list": latest_followers,  "profile_data": user_profile,}
+    context = {"latest_followers_list": latest_followers,  "profile_data": user_profile, "profile": user_profile}
     return render(request, "view_followers.html", context)
 
 
@@ -65,7 +65,7 @@ def view_user_posts(request, profile_id):
 
     user_profile_stripped = create_combined_profile(request, user_profile, user_cu, len(latest_posts_list))
 
-    context = {"latest_posts": latest_posts_list, "profile_data": user_profile_stripped,}
+    context = {"latest_posts": latest_posts_list, "profile_data": user_profile_stripped, "profile": user_profile_stripped}
     return render(request, "posts.html", context)
 
 
@@ -89,14 +89,14 @@ def view_user_comments(request, profile_id):
 
     user_profile_stripped = create_combined_profile(request, user_profile, user_cu)
 
-    context = {"latest_posts": latest_comments_list, "profile_data": user_profile_stripped,}
+    context = {"latest_posts": latest_comments_list, "profile_data": user_profile_stripped, "profile": user_profile_stripped}
     return render(request, "comments.html", context)
 
 
 @login_required
 def view_user_reposts(request, profile_id):
     latest_reposts_list = Post.objects.filter(reposts__id=profile_id)
-    context = {"latest_reposts_list": latest_reposts_list}
+    context = {"latest_reposts_list": latest_reposts_list,}
     return render(request, "posts.html", context)
 
 
@@ -115,7 +115,7 @@ def view_user_likes(request, profile_id):
     latest_likes_list_raw_c = Comment.objects.filter(likes__id=profile_id)
     latest_likes_list = create_combined_posts(latest_likes_list_raw_p, requester) + create_combined_posts(latest_likes_list_raw_q, requester) + create_combined_posts(latest_likes_list_raw_c, requester)
 
-    context = {"latest_posts": latest_likes_list, "profile_data": user_profile_stripped,}
+    context = {"latest_posts": latest_likes_list, "profile_data": user_profile_stripped, "profile": user_profile_stripped}
     return render(request, "likes.html", context)
 
 @login_required
@@ -127,7 +127,7 @@ def view_user_media(request, profile_id):
 
     latest_media_list=[]
 
-    context = {"latest_posts": latest_media_list, "profile_data": user_profile_stripped,}
+    context = {"latest_posts": latest_media_list, "profile_data": user_profile_stripped, "profile": user_profile_stripped}
     return render(request, "media.html", context)
 
 
@@ -142,7 +142,7 @@ def view_user_bookmarks(request):
     latest_quotes = create_combined_posts(latest_quotes_raw, requester)
     latest_posts += latest_quotes
 
-    context = {"latest_posts": latest_posts, "username": requester_cu.user_name}
+    context = {"latest_posts": latest_posts, "username": requester_cu.user_name, "profile": create_combined_profile(request, requester, requester_cu)}
     return render(request, "bookmarks.html", context)
 
 
@@ -218,7 +218,7 @@ def view_notifications(request):
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
     requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
 
-    context = {"username": requester_cu.user_name}
+    context = {"username": requester_cu.user_name, "profile": create_combined_profile(request, requester, requester_cu)}
     return render(request, "notifications.html", context)
 
 

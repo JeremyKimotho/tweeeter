@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonRespons
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse 
 
-from homepage.views import create_combined_posts, create_post_in_post_object, create_quote_post_in_modal_object
+from homepage.views import create_combined_posts, create_quote_post_in_modal_object, create_combined_profile
 from posts.models import BasePost, Comment, Post, Quote    
 from users.models import CustomUser
 from user_profile.models import UserProfile
@@ -34,7 +34,7 @@ def display_post(request, post_id, post_op_id):
     op_post_comments = create_combined_posts(latest_comments_op, requester)
     latest_comments = create_combined_posts(latest_comments_all, requester)
 
-    context = {'og_post':og_post_info, 'op_comments':op_post_comments, 'latest_comments_list':latest_comments, "new_comment_form": NewCommentFormLite(),}
+    context = {'og_post':og_post_info, 'op_comments':op_post_comments, 'latest_comments_list':latest_comments, "new_comment_form": NewCommentFormLite(), "profile": create_combined_profile(request, requester, requester_cu)}
 
     return render(request, "display_post.html", context)
 
