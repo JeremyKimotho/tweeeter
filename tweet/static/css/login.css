@@ -1,0 +1,89 @@
+.text-container{
+    /* border: 0.5px solid red; */
+    /* width: 55%; */
+    background-color: white;
+    padding-bottom: 1.5%;
+    border-top: 2px solid green;
+    border-bottom:  2px solid green;
+    /* opacity:50%; */
+}
+
+h3 {
+    text-align: center;
+    padding-top:5%;
+}
+
+.username-text td, .password-text td {
+    font-size:18px;
+}
+
+input {
+    padding: 6px;
+    font-size: 16px;
+    border: 0.5px solid #ccc;  /* Default border color */
+    outline: none;           /* Remove default outline */
+    border-radius: 5px;
+}
+
+input:focus {
+    background-color: #f7fcf7;
+    border-color: green;    
+}
+
+button {
+    background-color: green;
+    border: none;
+    color:white;
+    font-size: 20px;
+    border-radius:50px;
+    font-weight:300;
+    padding-left:40px;
+    padding-right:40px;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+.button-container {
+    padding-top:5%;
+    padding-left: 33%;
+}
+
+.background-div {
+    background-image: url('../images/login_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* margin-top:10%;
+    padding-top:5%;
+    padding-bottom:5%; */
+    border:2px solid red;
+    padding-bottom: 60%;
+}
+
+.content-div {
+    border: 2px solid purple;
+}
+
+.content-div img {
+    /* width:75%;
+    height:75%; */
+    /*margin-left: 15%;
+    margin-top: 2.5%; */
+}
+
+footer ul {
+    color: grey;
+    font-size: 14px;
+    padding-top: 45%;
+}
+
+/* For screens larger than 1441px */
+@media (min-width: 1441px) {
+    .background-div {
+        padding-bottom:105%;
+    }
+
+    footer ul {
+        padding-top: 100%;
+    }
+}
