@@ -34,6 +34,10 @@ li h3 {
   /* position: fixed; */
 }
 
+.navbar-base .active-text {
+  font-weight:600;
+}
+
 .navbar-buttons {
   display:flex;
   align-items: center;

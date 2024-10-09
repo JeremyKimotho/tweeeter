@@ -261,5 +261,23 @@ def pin_post(request, post_id):
         return HttpResponse(status=200)
     else:
         return redirect(reverse('homepage:home')) # homepage    
+    
+@login_required
+def view_quotes(request, post_id):
+    post = get_object_or_404(BasePost, id=post_id)
+            
+    requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())
+    requester = get_object_or_404(UserProfile, user_id=requester_cu.id)
+
+    latest_quotes_raw = post.quotes.all().order_by("-date_posted")
+
+    latest_quotes = create_combined_posts(latest_quotes_raw, requester, True, post)
+
+    context = {"latest_posts": latest_quotes, "profile": create_combined_profile(request, requester, requester_cu), }
+
+    if len(latest_quotes) <= 0:
+        context["empty"]=True
+
+    return render(request, "view_quotes.html", context) 
 
 

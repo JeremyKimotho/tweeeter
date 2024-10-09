@@ -202,7 +202,7 @@ def create_combined_profiles(request, profiles):
     return combined_profiles
 
 
-def create_combined_posts(posts, requester_profile):
+def create_combined_posts(posts, requester_profile, quote_view=False, quote_view_og_post=None):
     users = [get_object_or_404(UserProfile, id=p.poster_id) for p in posts]
     cusers = [get_object_or_404(CustomUser, id=u.user_id) for u in users]
     comments = [(p.getComments()) for p in posts] 
@@ -220,7 +220,18 @@ def create_combined_posts(posts, requester_profile):
                 "body":post.body,
                 "pub_date":post.date_posted,
                 "time_since":time_since_post(post),
-                "quote_post":create_post_in_post_object(post.quote_post)
+                "quote_post":create_post_in_post_object(post.quote_post),
+                "type": "q"
+            }
+
+        elif quote_view:
+            post_stripped = {
+                "id":post.id,
+                "body":post.body,
+                "pub_date":post.date_posted,
+                "time_since":time_since_post(post),
+                "quote_post":create_post_in_post_object(quote_view_og_post),
+                "type": "q"
             }
 
         else:
@@ -229,7 +240,8 @@ def create_combined_posts(posts, requester_profile):
                 "id":post.id,
                 "body":post.body,
                 "pub_date":post.date_posted,
-                "time_since":time_since_post(post)
+                "time_since":time_since_post(post),
+                "type": "r"
             }
 
         if post.poster_id == requester_profile.id:

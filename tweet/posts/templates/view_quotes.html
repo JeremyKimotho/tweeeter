@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Tweeeet: View Quotes {% endblock %}
+
+{% block content_wrapper %}
+<div class="container">
+    <div class="text-center homepage-home-indicator-text">
+        <nav class="nav nav-pills nav-justified">
+            <h3 class="nav-link active">
+                Quotes
+            
+                <div class="bottom-border-central"></div>
+            </h3>
+        </nav>
+    </div>
+    {% if empty %}
+    <div class="container text-center empty-quote-text">
+        <p>Nothing here yet...</p>
+    </div>
+    {% else %}
+    {% include 'list_profile_posts.html' with latest_profile_posts=latest_posts %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/list_posts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/view_quotes.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/list_posts.js' %}"></script>
+{% endblock %}

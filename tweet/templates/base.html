@@ -37,50 +37,50 @@
                         <div class="col-12">
                             <ul>
                                 <li>
-                                    <button onclick="window.location.href='{% url 'homepage:home' %}'">
+                                    <button id="home-button-navbar-id" data-url="{% url 'homepage:home' %}">
                                         <span class="navbar-buttons">
                                             <i class="fa-solid fa-house"></i>
-                                            <h3>Home</h3>
+                                            <h3 id="home-button-text-navbar-id">Home</h3>
                                         </span>
                                     </button>
                                 </li>
                                 <li>
-                                    <button onclick="window.location.href='{% url 'homepage:explore' %}'">
+                                    <button id="explore-button-navbar-id" data-url="{% url 'homepage:explore' %}">
                                         <span class="navbar-buttons">
                                             <i class="fa-regular fa-compass"></i>
-                                            <h3>Explore</h3>
+                                            <h3 id="explore-button-text-navbar-id">Explore</h3>
                                         </span>
                                     </button>
                                 </li>
                                 <li>
-                                    <button onclick="window.location.href='{% url 'profile:notifications' %}'">
+                                    <button id="notifications-button-navbar-id" onclick="window.location.href='{% url 'profile:notifications' %}'">
                                         <span class="navbar-buttons">
                                             <i class="fa-regular fa-bell"></i>
-                                            <h3>Notifications</h3>
+                                            <h3 id="notifications-button-text-navbar-id">Notifications</h3>
                                         </span>
                                     </button>
                                 </li>
                                 <li>
-                                    <button onclick="window.location.href='{% url 'profile:bookmarks' %}'">
+                                    <button id="bookmark-button-navbar-id" onclick="window.location.href='{% url 'profile:bookmarks' %}'">
                                         <span class="navbar-buttons">
                                             <i class="fa-regular fa-bookmark"></i>
-                                            <h3>Bookmarks</h3>
+                                            <h3 id="bookmark-button-text-navbar-id">Bookmarks</h3>
                                         </span>
                                     </button>
                                 </li>
                                 <li>
-                                    <button onclick="window.location.href='{% url 'profile:my_profile' %}'">
+                                    <button id="profile-button-navbar-id" onclick="window.location.href='{% url 'profile:my_profile' %}'">
                                         <span class="navbar-buttons">
                                             <i class="fa-regular fa-user"></i>
-                                            <h3>Profile</h3>
+                                            <h3 id="profile-button-text-navbar-id">Profile</h3>
                                         </span>
                                     </button>
                                 </li>
                                 <li>
-                                    <button onclick="">
+                                    <button id="settings-button-navbar-id" onclick="">
                                         <span class="navbar-buttons">
                                             <i class="fa-solid fa-ellipsis"></i>
-                                            <h3>Settings</h3>
+                                            <h3 id="settings-button-text-navbar-id">Settings</h3>
                                         </span>
                                     </button>
                                 </li>

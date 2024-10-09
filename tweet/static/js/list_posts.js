@@ -84,13 +84,7 @@ htmx.on("htmx:beforeSwap", (e) => {
 htmx.on("hidden.bs.modal", () => {
   document.getElementById("comment").innerHTML = ""
   document.getElementById("quote").innerHTML = ""
-})
-
-// htmx.on("htmx:afterRequest", (e) => {
-//   if (e.target.id == "new-post-form-textarea") {
-//     post_form_homepage.reset()
-//   }
-// })      
+})    
 
 document.addEventListener('click', function (event) {
   var dropdowns = document.querySelectorAll('.dropdown-menu');
@@ -106,11 +100,9 @@ document.addEventListener('click', function (event) {
 
 pin_text_links.forEach(function (pinText) {
   pinText.addEventListener('click', function () {
-  
     var toastEl = document.getElementById('myToast');
     var toast = new bootstrap.Toast(toastEl);
     toast.show();
-    console.log("pinText listener added")
   }, true);
 
 }, true);

@@ -137,6 +137,9 @@
                 <span class="ms-2" id="post-bookmarks-{{ post.post.id }}">{{ post.bookmarks_count }}</span> <!-- Counter or any text -->
                 </div>
             </div>
+            <div class="row">
+                <a href="{% url 'posts:view_quotes' post.post.id %}"><p>View Quotes</p></a>
+            </div>
         </div>
     </div>
 </div>

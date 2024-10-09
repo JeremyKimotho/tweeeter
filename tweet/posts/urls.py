@@ -19,4 +19,5 @@ urlpatterns=[
     path("create-post/", views.create_post, name='create_post'),
     path("get-comments-count/<int:post_id>/", views.get_comments_count, name="get_comments_count"),
     path("pin-post/<int:post_id>/", views.pin_post, name='pin_post'),
+    path("view-quotes/<int:post_id>/", views.view_quotes, name='view_quotes'),
 ] 

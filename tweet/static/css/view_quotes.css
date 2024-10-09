@@ -1,0 +1,14 @@
+.card-container {
+    margin-top: -4%;
+}
+
+.empty-quote-text {
+    border: 0.5px solid #C0C0C0;
+    height: 100%;
+}
+
+.empty-quote-text p {
+    font-size: 20px;
+    padding-top: 25%;
+}
+

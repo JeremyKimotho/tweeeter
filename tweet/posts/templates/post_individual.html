@@ -35,7 +35,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item pin-text" id="pin-text-{{post.post.id}}" hx-get="{% url 'posts:pin_post' post.post.id %}" onclick="event.stopPropagation();">
+                                <a class="dropdown-item pin-text" id="pin-text-{{post.post.id}}" hx-get="{% url 'posts:pin_post' post.post.id %}" data-bs-toggle="popover" onclick="event.stopPropagation();">
                                     <i class="fa-solid fa-thumbtack"></i> Pin to profile
                                 </a>
                             </li>
@@ -104,7 +104,7 @@
                                 <li><a class="dropdown-item" hx-get="{% url 'posts:quote' post.post.id %}" hx-target="#quote" onclick="event.stopPropagation();">Quote</a></li>
                             </ul>
                         </div>
-                        <span class="ms-2" id="post-reposts-{{ post.post.id }}">{{ post.reposts_count }}</span>
+                        <a id="view-quotes" href="{% url 'posts:view_quotes' post.post.id %}"><span class="ms-2" id="post-reposts-{{ post.post.id }}">{{ post.reposts_count }}</span></a>
                     </div>
 
                     <!-- Third Button + Counter -->

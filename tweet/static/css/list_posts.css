@@ -391,4 +391,14 @@
     font-size:18px;
 }
 
+#view-quotes {
+    text-decoration: none;
+    color:grey;
+}
+
+#view-quotes:hover {
+    color:#2ecc71;
+}
+
+
 
