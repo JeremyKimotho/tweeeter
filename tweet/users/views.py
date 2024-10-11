@@ -27,7 +27,13 @@ def register_user(request):
             )
 
             login(request, new_user)
-            return redirect(reverse('homepage:home'))
+            return HttpResponse(status=204)
+        else:
+            # Check for specific errors and replace them
+            if "Custom user with this Email address already exists." in form.errors.get("email", []):
+                form.errors["email"] = ["Account with this email address already exists."]
+            if "Custom user with this User name already exists." in form.errors.get("user_name", []):
+                form.errors["user_name"] = ["This username is taken."]
     # if a GET (or anything other than POST), create blank form
     else:
         form = CustomUserCreationForm()
