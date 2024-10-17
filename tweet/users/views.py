@@ -47,3 +47,20 @@ def delete_user():
 @login_required
 def change_account_details():
     pass
+
+def search_usernames(request):
+    search = request.POST.get('user_name')
+
+    if search == "":
+        context = {"none": True}
+    else: 
+        object_exists = CustomUser.objects.filter(user_name=search).exists()
+
+        if object_exists:
+            context = {"fail": True}
+        else:  
+            context = {"success": True}
+
+    print(search, context)
+    return render(request, "registration/username_search.html", context)
+ 

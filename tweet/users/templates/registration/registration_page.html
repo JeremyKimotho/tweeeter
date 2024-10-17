@@ -23,6 +23,9 @@
                 </tr>
                 <tr class="username-text-register">
                     <td>{{ form.user_name }}</td>
+                    <td>
+                        <span id="username-search-result"></span>
+                    </td>
 
                     <tr class="error-text">
                         {% if form.user_name.errors %}
