@@ -1,3 +1,5 @@
+@import url("https://www.fontspace.com/category/scribble");
+
 .text-container{
     width: 65%;
     background-color: white;
@@ -20,6 +22,7 @@
 .text-container h3 {
     text-align: center;
     padding-top:5%;
+    font-family: "Pangolin", cursive;
 }
 
 .username-text td, .password-text td {
@@ -153,6 +156,8 @@ footer ul {
     color: grey;
     font-weight:400;
     text-align: right;
+    font-family: "Pangolin", cursive;
+    font-style: normal;
 }
 
 .signup-modal .modal-body td {
@@ -180,6 +185,8 @@ footer ul {
     color: red;
     padding-left: 10px;
 }
+
+
 
 /* For screens larger than 1441px */
 @media (min-width: 1441px) {
