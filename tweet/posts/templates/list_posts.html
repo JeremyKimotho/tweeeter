@@ -33,8 +33,15 @@
     </div>
 {% endblock %}
 
+{% block news_wrapper %}
+    <div class="news-wrapper">
+        {% include 'news_content.html' %}
+    </div>
+{% endblock %}
+
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/list_posts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/news_content.css' %}">
 {% endblock %}
 
 {% block extra_js %}

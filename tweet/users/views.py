@@ -61,6 +61,5 @@ def search_usernames(request):
         else:  
             context = {"success": True}
 
-    print(search, context)
     return render(request, "registration/username_search.html", context)
  

@@ -126,19 +126,15 @@
                 <!-- Main Content Area -->
                 <div class="container">
                     {% block content_wrapper %}
-                    <!-- Child templates will insert content here -->
+                    <!-- Child templates will insert post content here -->
                     {% endblock %}
                 </div>
             </div>
             <div class="col-3 d-flex flex-column align-items-center explore-info-base">
                 <div class="container">
-                    <div class="row">
-                        <form class="d-flex" role="search" action="{% url 'homepage:search' %}" method="post">
-                            {% csrf_token %}
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search_form">
-                        </form>
-                        <p> 2024 Tweetclone. All rights reserved.</p>
-                    </div>
+                    {% block news_wrapper %}
+                    <!-- Child templates will insert news content here -->
+                    {% endblock %}
                 </div>
             </div>
         </div>

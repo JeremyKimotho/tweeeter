@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="row search-bar">
+        <form class="d-flex" role="search" action="{% url 'homepage:search' %}" method="post">
+            {% csrf_token %}
+            <input class="form-control" type="search" placeholder="🔍    Search" aria-label="Search" id="search_form" name="search_name" hx-post="homepage:search" hx-trigger="input changed delay:500ms" hx-target="#home-search-result" autocomplete="off">
+        </form>
+
+        <div class="row search-results" id="home-search-result">
+            <!-- <span>Try searching for people</span> -->
+            {% for profile in profiles %}
+
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="row w-happening">
+        <h4>What's happening</h3>
+    </div>
+
+    <div class="row w-follow">
+        <h4>Who to follow</h3>
+    </div>
+    <p> 2024 Tweetclone. All rights reserved.</p>
+</div>

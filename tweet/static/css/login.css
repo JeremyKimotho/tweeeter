@@ -90,7 +90,7 @@ footer ul {
     margin-left:22.5%;
 }
 
-.form-control:focus {
+.form-control:focus, .form-control:active {
     background-color: #f7fcf7;
     border-color: green;
     box-shadow: none; 
@@ -122,6 +122,13 @@ footer ul {
 
 .modal-dialog {
     /* max-width: 20%; */
+}
+
+.text-container .error-text td {
+    padding-top:10px;
+    color: red;
+    padding-bottom: 10px;
+    font-size: 14px;
 }
 
 .signup-modal #modal-close {

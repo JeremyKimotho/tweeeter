@@ -98,11 +98,14 @@
                 <!-- Second Button + Counter -->
                 <div class="col-3 d-flex justify-content-center align-items-center">
                     <div class="btn-group dropup">
-                        <button hx-get="{% url 'posts:repost' post.post.id %}" hx-target="#post-reposts-{{ post.post.id }}" onclick="event.stopPropagation();">
-                            <!-- Repost Icon: Unreposted State -->
-                            <i class="fa-solid fa-retweet default-icon"></i>
-                            <!-- Repost Icon: Reposted State -->
-                            <!-- <i class="fa-solid fa-retweet reposted-icon-change"></i>  -->
+                        <button hx-get="{% url 'posts:repost' post.post.id %}" hx-target="#post-reposts-{{ post.post.id }}" onclick="event.stopPropagation();" class="repost-button-icon-base" data-url="{{ post.post.id }}">
+                            {% if post.post.reposted %}
+                                <!-- Repost Icon: Reposted State -->
+                                <i class="fa-solid fa-retweet reposted-icon-change" id="repost-button-icon-actual-{{ post.post.id }}"></i> 
+                            {% else %}
+                                <!-- Repost Icon: Unreposted State -->
+                                <i class="fa-solid fa-retweet default-icon" id="repost-button-icon-actual-{{ post.post.id }}"></i>
+                            {% endif %}
                         </button>
                         <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
@@ -117,27 +120,33 @@
 
                 <!-- Third Button + Counter -->
                 <div class="col-3 d-flex justify-content-center align-items-center">
-                    <button hx-get="{% url 'posts:like' post.post.id %}" hx-target="#post-likes-{{ post.post.id }}" onclick="event.stopPropagation();">
-                        <!-- Like Icon: Unliked State -->
-                        <i class="fa-regular fa-heart default-icon"></i>
-                        <!-- Like Icon: Liked State -->
-                        <!-- <i class="fa-solid fa-heart liked-icon-change"></i>  -->
+                    <button hx-get="{% url 'posts:like' post.post.id %}" hx-target="#post-likes-{{ post.post.id }}" onclick="event.stopPropagation();" class="like-button-icon-base" data-url="{{ post.post.id }}">
+                        {% if post.post.liked %}
+                            <!-- Like Icon: Liked State -->
+                            <i class="fa-solid fa-heart liked-icon-change" id="like-button-icon-actual-{{ post.post.id }}"></i> 
+                        {% else %}
+                            <!-- Like Icon: Unliked State -->
+                            <i class="fa-regular fa-heart default-icon" id="like-button-icon-actual-{{ post.post.id }}"></i>
+                        {% endif %}
                     </button>
                     <span class="ms-2" id="post-likes-{{ post.post.id }}">{{ post.likes_count }}</span> <!-- Counter or any text -->
                 </div>
 
                 <!-- Fourth Button + Counter -->
                 <div class="col-3 d-flex justify-content-center align-items-center">
-                <button hx-get="{% url 'posts:bookmark' post.post.id %}" hx-target="#post-bookmarks-{{ post.post.id }}" onclick="event.stopPropagation();">
-                    <!-- Bookmark Icon: Unbookmark State -->
-                    <i class="fa-regular fa-bookmark default-icon"></i>
-                    <!-- Bookmark Icon: Bookmarked State -->
-                    <!-- <i class="fa-solid fa-bookmark bookmarked-icon-change"></i>  -->
+                <button hx-get="{% url 'posts:bookmark' post.post.id %}" hx-target="#post-bookmarks-{{ post.post.id }}" onclick="event.stopPropagation();"class="bookmark-button-icon-base" data-url="{{ post.post.id }}">
+                    {% if post.post.bookmarked %}
+                        <!-- Bookmark Icon: Bookmarked State -->
+                        <i class="fa-solid fa-bookmark bookmarked-icon-change" id="bookmark-button-icon-actual-{{ post.post.id }}"></i> 
+                    {% else %}
+                        <!-- Bookmark Icon: Unbookmarked State -->
+                        <i class="fa-regular fa-bookmark default-icon" id="bookmark-button-icon-actual-{{ post.post.id }}"></i>
+                    {% endif %}
                 </button>
                 <span class="ms-2" id="post-bookmarks-{{ post.post.id }}">{{ post.bookmarks_count }}</span> <!-- Counter or any text -->
                 </div>
             </div>
-            <div class="row">
+            <div class="row view-quotes-text">
                 <a href="{% url 'posts:view_quotes' post.post.id %}"><p>View Quotes</p></a>
             </div>
         </div>

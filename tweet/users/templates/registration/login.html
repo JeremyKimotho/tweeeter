@@ -30,13 +30,15 @@
                         </tr>
                         <tr class="username-text">
                             <td>{{ form.username }}</td>
+
                         </tr>
                         <tr class="password-text">    
                             <td>{{ form.password }}</td>
+
                         </tr>
-                        <tr>
+                        <tr class="error-text">
                             {% if form.errors %}
-                                <p>Your username and password didn't match.</p>
+                                <td>Please enter a correct email address/username and password. Note that both fields may be case-sensitive.</td>
                             {% endif %}
                         </tr>
                         <tr>

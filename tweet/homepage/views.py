@@ -247,6 +247,15 @@ def create_combined_posts(posts, requester_profile, quote_view=False, quote_view
         if post.poster_id == requester_profile.id:
             post_stripped["own_post"] = "Yes"
 
+        if post.likes.filter(id=requester_profile.id).exists():
+            post_stripped["liked"] = "Yes"
+
+        if post.reposts.filter(id=requester_profile.id).exists():
+            post_stripped["reposted"] = "Yes"
+
+        if post.bookmarks.filter(id=requester_profile.id).exists():
+            post_stripped["bookmarked"] = "Yes"
+
         # Take only the data we need from user profile object
         profile_stripped = {
             "id":profile.id,
@@ -300,7 +309,14 @@ def view_posts(request):
 
 @login_required
 def search(request):
-    pass
+    search = request.POST.get("search_name")
+
+    if search == "":
+        context = {"none": True}
+    else:
+        context = {"none": False}
+
+    return render(request, context=context)
 
 def view_explore(request):
     requester_cu = get_object_or_404(CustomUser, email=request.user.get_username())

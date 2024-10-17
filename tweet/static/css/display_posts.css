@@ -80,3 +80,9 @@
   padding-right:5px;
   padding-top: 7%;
 }
+
+.og-post .card-footer .view-quotes-text a {
+    color: burlywood;
+    text-decoration: none;
+    padding: 10px;
+}

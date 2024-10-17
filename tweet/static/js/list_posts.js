@@ -4,6 +4,9 @@ const delete_post_modal = new bootstrap.Modal(document.getElementById("delete-po
 const block_user_modal = new bootstrap.Modal(document.getElementById("block-user-modal"));
 
 const pin_text_links = document.querySelectorAll('.pin-text');
+const like_button = document.querySelectorAll('.like-button-icon-base');
+const repost_button = document.querySelectorAll('.repost-button-icon-base');
+const bookmark_button = document.querySelectorAll('.bookmark-button-icon-base');
 
 console.log("I homepage.js was loaded in and is getting active ! ")
 
@@ -107,5 +110,56 @@ pin_text_links.forEach(function (pinText) {
 
 }, true);
 
+like_button.forEach(function (button) {
+  button.addEventListener('click', function() {
+    url = button.getAttribute('data-url');
+    icon = document.getElementById('like-button-icon-actual-' + url);
+    if (icon.classList.contains('fa-regular')) {
+      icon.classList.remove('fa-regular');
+      icon.classList.remove('default-icon');
 
+      icon.classList.add('fa-solid');
+      icon.classList.add('liked-icon-change');
+    } else {
+      icon.classList.remove('fa-solid');
+      icon.classList.remove('liked-icon-change');
 
+      icon.classList.add('fa-regular');
+      icon.classList.add('default-icon');
+    }
+  });
+});
+
+repost_button.forEach(function (button) {
+  button.addEventListener('click', function() {
+    url = button.getAttribute('data-url');
+    icon = document.getElementById('repost-button-icon-actual-' + url);
+    if (icon.classList.contains('default-icon')) {
+      icon.classList.remove('default-icon');
+      icon.classList.add('reposted-icon-change');
+    } else {
+      icon.classList.remove('reposted-icon-change');
+      icon.classList.add('default-icon');
+    }
+  });
+});
+
+bookmark_button.forEach(function (button) {
+  button.addEventListener('click', function() {
+    url = button.getAttribute('data-url');
+    icon = document.getElementById('bookmark-button-icon-actual-' + url);
+    if (icon.classList.contains('fa-regular')) {
+      icon.classList.remove('fa-regular');
+      icon.classList.remove('default-icon');
+
+      icon.classList.add('fa-solid');
+      icon.classList.add('bookmarked-icon-change');
+    } else {
+      icon.classList.remove('fa-solid');
+      icon.classList.remove('bookmarked-icon-change');
+
+      icon.classList.add('fa-regular');
+      icon.classList.add('default-icon');
+    }
+  });
+});

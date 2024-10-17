@@ -1,0 +1,39 @@
+.news-wrapper .search-bar {
+  padding-top: 5%;
+  text-align: center;
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center;     /* Vertical centering */
+  width: 100%;             /* Ensure it takes the full width */
+  border: 1px solid #ccc;  /* Optional: Visual boundary */
+}
+
+.news-wrapper .w-happening {
+  padding-top: 5%;
+}
+
+.news-wrapper .w-follow {
+  padding-top: 5%;
+}
+
+.news-wrapper .search-bar .form-control {
+    border-radius:50px;
+    width: 100%;
+}
+
+.news-wrapper .search-bar .form-control:active, .news-wrapper .search-bar .form-control:focus {
+    border-radius:50px;
+    background-color: #f7fcf7;
+    border-color: green;
+    box-shadow: none; 
+}
+
+.news-wrapper .search-results {
+    display: auto;
+    background-color: white;
+    border: solid 0.5px green;
+    text-align: center;    
+    border-radius: 5px;       /* Optional: Rounded corners */
+    /* Straight dark green shadow */
+    box-shadow: 0px 0px 7.5px 2.5px rgba(0, 100, 0, 0.2);     
+}
